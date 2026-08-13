@@ -75,13 +75,18 @@ body {
   width: 1126px;
   max-width: 100%;
   margin: 0 auto;
-  text-align: center;
-  border-inline: 1px solid var(--border);
   min-height: 100svh;
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
 }
+
+/* The side rails that separate the app column from the matrix rain live on the
+   #root element in index.html as `border-x border-border dark:border-dark-border`,
+   so they follow the design-system tokens and the .dark class the app toggles.
+   They are deliberately not set here: the var(--border) in this file belongs to
+   a leftover template palette that keys off prefers-color-scheme, which rendered
+   a near-white rail whenever the OS was light but the app was in dark theme. */
 
 h2 {
   font-size: 24px;

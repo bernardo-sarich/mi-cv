@@ -66,18 +66,21 @@ function Job({ job, index }) {
         <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-accent dark:bg-dark-accent" />
       </span>
 
-      <div className="flex flex-col items-center gap-1">
+      <div className="flex flex-col items-start gap-1">
         <span className="font-mono text-xs text-accent dark:text-dark-accent">
           {job.date}
         </span>
         <h3 className="text-lg font-semibold text-text dark:text-dark-text">
-          {job.role} <span className="text-textDim dark:text-dark-textDim">· {job.company}</span>
+          {job.role}{' '}
+          <span className="text-textDim dark:text-dark-textDim">
+            · {job.company}
+          </span>
         </h3>
         <motion.ul
           variants={bulletContainerVariants}
           initial="hidden"
           animate={isVisible ? 'show' : 'hidden'}
-          className="mt-2 flex flex-col items-center gap-1.5"
+          className="mt-2 flex flex-col items-start gap-1.5"
         >
           {job.bullets.map((bullet) => (
             <motion.li
@@ -102,7 +105,7 @@ export default function Experience() {
       <div className="mx-auto max-w-5xl">
         <SectionLabel>{'<section id="experience">'}</SectionLabel>
 
-        <div ref={progressRef} className="relative mx-auto mt-8 w-fit text-center">
+        <div ref={progressRef} className="relative mt-8">
           <div className="absolute left-0 top-0 h-full border-l border-border dark:border-dark-border" />
           <div
             className="absolute left-0 top-0 border-l-2 border-accent dark:border-dark-accent transition-[height] duration-150 ease-out"
