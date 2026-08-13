@@ -1,0 +1,18 @@
+# Node / React
+node_modules/
+dist/
+.env
+
+# .NET / Azure Functions
+bin/
+obj/
+local.settings.json
+
+# SWA CLI
+.swa/
+
+# Editor
+
+# OpenSpec (Claude Code)
+.claude/skills/openspec-*
+.claude/commands/opsx/
