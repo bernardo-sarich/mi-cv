@@ -66,12 +66,12 @@ The Hero section SHALL display a row of one or more stats (e.g. "7+ años de exp
 - **THEN** the stat numbers remain at their initial (0) state and do not begin animating
 
 ### Requirement: Staggered entrance animation
-The Hero section's major blocks (terminal, name/status/role, bio, buttons) SHALL each animate in with a fade-in and slide-up effect on mount, with each subsequent block's animation starting slightly after the previous one's.
+The Hero section's major blocks (terminal, name/status/role, bio, and the stats/call-to-action group) SHALL each animate in with a fade-in and slide-up effect on mount, cascading rather than all appearing at once. The Hero is laid out as two columns, so each column runs its own staggered sequence and the two sequences play in parallel.
 
 #### Scenario: Blocks fade and slide in on mount
 - **WHEN** the Hero section first mounts
-- **THEN** the terminal, name/status/role, bio, and buttons blocks each transition from transparent/offset to fully visible/in-place
+- **THEN** the terminal, name/status/role, bio, and stats/call-to-action blocks each transition from transparent/offset to fully visible/in-place
 
-#### Scenario: Blocks animate in a staggered sequence
+#### Scenario: Blocks animate in a staggered sequence within each column
 - **WHEN** the Hero section's entrance animation plays
-- **THEN** each block's animation begins after a short, consistent delay relative to the previous block, rather than all blocks animating simultaneously
+- **THEN** within a column, each block's animation begins after a short, consistent delay relative to the block above it, rather than that column's blocks animating simultaneously

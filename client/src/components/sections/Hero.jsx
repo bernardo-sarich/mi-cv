@@ -50,7 +50,7 @@ export default function Hero() {
         variants={containerVariants}
         initial="hidden"
         animate="show"
-        className="mx-auto grid max-w-5xl items-start gap-8 md:grid-cols-[minmax(0,1fr)_minmax(0,20rem)] md:gap-12"
+        className="mx-auto grid max-w-5xl items-start gap-8 md:grid-cols-[minmax(0,1fr)_minmax(0,24rem)] md:gap-12"
       >
         <motion.div
           variants={containerVariants}
@@ -87,13 +87,6 @@ export default function Hero() {
             sistemas robustos y escalables. Placeholder — se reemplaza con datos
             reales en la capa de datos.
           </motion.p>
-
-          <motion.div variants={blockVariants} className="flex flex-wrap gap-3">
-            <Button variant="primary">Descargar CV</Button>
-            <Button variant="secondary" onClick={scrollToProjects}>
-              Ver proyectos →
-            </Button>
-          </motion.div>
         </motion.div>
 
         <motion.div
@@ -114,11 +107,23 @@ export default function Hero() {
             </div>
           </motion.div>
 
-          <div ref={statsRef} className="flex flex-wrap gap-8">
-            {STATS.map((stat) => (
-              <Stat key={stat.label} {...stat} start={statsVisible} />
-            ))}
-          </div>
+          <motion.div
+            variants={blockVariants}
+            className="flex flex-wrap items-start gap-x-8 gap-y-6"
+          >
+            <div ref={statsRef} className="flex flex-wrap gap-8">
+              {STATS.map((stat) => (
+                <Stat key={stat.label} {...stat} start={statsVisible} />
+              ))}
+            </div>
+
+            <div className="flex flex-col gap-3">
+              <Button variant="primary">Descargar CV</Button>
+              <Button variant="secondary" onClick={scrollToProjects}>
+                Ver proyectos →
+              </Button>
+            </div>
+          </motion.div>
         </motion.div>
       </motion.div>
     </section>
