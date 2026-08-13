@@ -13,6 +13,9 @@ local.settings.json
 
 # Editor
 
+# Playwright MCP output (console logs, snapshots, screenshots)
+.playwright-mcp/
+
 # OpenSpec (Claude Code)
 .claude/skills/openspec-*
 .claude/commands/opsx/

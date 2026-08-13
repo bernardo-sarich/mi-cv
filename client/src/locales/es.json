@@ -1,0 +1,31 @@
+{
+  "nav": {
+    "about": "Sobre mí",
+    "experience": "Experiencia",
+    "skills": "Habilidades",
+    "projects": "Proyectos",
+    "contact": "Contacto"
+  },
+  "hero": {
+    "downloadCv": "Descargar CV",
+    "viewProjects": "Ver proyectos"
+  },
+  "experience": {
+    "title": "Experiencia"
+  },
+  "skills": {
+    "title": "Habilidades"
+  },
+  "projects": {
+    "title": "Proyectos",
+    "viewRepo": "Ver repositorio"
+  },
+  "contact": {
+    "title": "Contacto",
+    "formName": "Nombre",
+    "formEmail": "Correo electrónico",
+    "formMessage": "Mensaje",
+    "formSubmit": "Enviar",
+    "formSent": "¡Mensaje enviado!"
+  }
+}
