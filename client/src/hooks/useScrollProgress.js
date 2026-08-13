@@ -1,11 +1,16 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 export function useScrollProgress() {
-  const ref = useRef(null)
+  const [node, setNode] = useState(null)
   const [progress, setProgress] = useState(0)
 
+  // A callback ref (rather than useRef) so the effect below re-runs once the
+  // node actually mounts, even if that happens after this hook's own first
+  // render (e.g. the section it's attached to renders null while its content
+  // is still loading, then mounts the real node on a later render).
+  const ref = useCallback((element) => setNode(element), [])
+
   useEffect(() => {
-    const node = ref.current
     if (!node) return
 
     const handle = () => {
@@ -24,7 +29,7 @@ export function useScrollProgress() {
       window.removeEventListener('scroll', handle)
       window.removeEventListener('resize', handle)
     }
-  }, [])
+  }, [node])
 
   return [ref, progress]
 }

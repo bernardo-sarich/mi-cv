@@ -1,50 +1,25 @@
-import { motion } from 'framer-motion'
+import { motion, useReducedMotion } from 'framer-motion'
+import { useTranslation } from 'react-i18next'
 import { useScrollProgress } from '../../hooks/useScrollProgress.js'
 import { useScrollReveal } from '../../hooks/useScrollReveal.js'
+import { useCVData } from '../../hooks/useCVData.js'
 import SectionLabel from '../ui/SectionLabel.jsx'
+import SectionTitle from '../ui/SectionTitle.jsx'
 
-const JOBS = [
-  {
-    date: '2022 — presente',
-    role: 'Backend Developer',
-    company: 'Acme Corp',
-    bullets: [
-      'Diseñé e implementé servicios REST de alta disponibilidad.',
-      'Reduje el tiempo de respuesta promedio en un 40% mediante optimización de queries.',
-      'Lideré la migración de infraestructura a contenedores.',
-    ],
-  },
-  {
-    date: '2020 — 2022',
-    role: 'Software Engineer',
-    company: 'Beta Labs',
-    bullets: [
-      'Desarrollé pipelines de datos para procesamiento en tiempo real.',
-      'Colaboré en el diseño de una arquitectura de microservicios.',
-      'Mentoreé a desarrolladores junior del equipo.',
-    ],
-  },
-  {
-    date: '2018 — 2020',
-    role: 'Junior Developer',
-    company: 'Gamma Software',
-    bullets: [
-      'Construí features end-to-end sobre una aplicación monolítica.',
-      'Escribí pruebas automatizadas que elevaron la cobertura del proyecto.',
-    ],
-  },
-]
-
-const bulletContainerVariants = {
-  hidden: {},
-  show: {
-    transition: { staggerChildren: 0.12 },
-  },
+function getBulletContainerVariants(reduced) {
+  return {
+    hidden: {},
+    show: {
+      transition: { staggerChildren: reduced ? 0 : 0.12 },
+    },
+  }
 }
 
-const bulletVariants = {
-  hidden: { opacity: 0, y: 8 },
-  show: { opacity: 1, y: 0 },
+function getBulletVariants(reduced) {
+  return {
+    hidden: { opacity: 0, y: 8 },
+    show: { opacity: 1, y: 0, transition: { duration: reduced ? 0 : undefined } },
+  }
 }
 
 function Job({ job, index }) {
@@ -52,17 +27,20 @@ function Job({ job, index }) {
     threshold: 0.2,
     rootMargin: '-35% 0px -35% 0px',
   })
+  const reduced = useReducedMotion()
+  const bulletContainerVariants = getBulletContainerVariants(reduced)
+  const bulletVariants = getBulletVariants(reduced)
 
   return (
     <motion.li
       ref={ref}
       initial={{ opacity: 0, y: 24 }}
       animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
-      transition={{ duration: 0.5 }}
+      transition={{ duration: reduced ? 0 : 0.5 }}
       className="grid gap-1 md:grid-cols-[10rem_minmax(0,1fr)] md:gap-0"
     >
       <span className="pl-8 font-mono text-xs text-accent dark:text-dark-accent md:pl-0 md:pr-8 md:pt-1.5 md:text-right">
-        {job.date}
+        {job.dates}
       </span>
 
       <div className="relative flex flex-col items-start gap-1 pl-8">
@@ -74,10 +52,7 @@ function Job({ job, index }) {
         </span>
 
         <h3 className="text-lg font-semibold text-text dark:text-dark-text">
-          {job.role}{' '}
-          <span className="text-textDim dark:text-dark-textDim">
-            · {job.company}
-          </span>
+          {job.role} <span className="text-textDim dark:text-dark-textDim">· {job.company}</span>
         </h3>
         <motion.ul
           variants={bulletContainerVariants}
@@ -101,12 +76,17 @@ function Job({ job, index }) {
 }
 
 export default function Experience() {
+  const { t } = useTranslation()
   const [progressRef, progress] = useScrollProgress()
+  const { data } = useCVData()
+
+  if (!data) return null
 
   return (
-    <section id="experience" className="px-4 py-8">
+    <section id="experience" className="px-6 py-8 sm:px-8">
       <div className="mx-auto max-w-5xl">
         <SectionLabel>{'<section id="experience">'}</SectionLabel>
+        <SectionTitle>{t('experience.title')}</SectionTitle>
 
         {/* The rail sits at the left edge of the content column: flush left when
             the date stacks above on narrow viewports, and after the 10rem date
@@ -119,8 +99,8 @@ export default function Experience() {
           />
 
           <ul className="flex flex-col gap-12">
-            {JOBS.map((job, index) => (
-              <Job key={job.company} job={job} index={index} />
+            {data.experience.map((job, index) => (
+              <Job key={`${job.company}-${index}`} job={job} index={index} />
             ))}
           </ul>
         </div>

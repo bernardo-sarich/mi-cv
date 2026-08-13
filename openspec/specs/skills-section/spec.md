@@ -42,8 +42,19 @@ The system SHALL animate each skill badge within a revealed category from scale 
 - **THEN** its badges animate from scale 0.7 to scale 1 with bounce-style easing, each badge starting its animation after the previous one
 
 ### Requirement: Placeholder skill data
-The system SHALL source skill categories and items from local placeholder data, with no external data fetching required for the section to render.
+The system SHALL source skill categories and items from the CV content data layer, with no external data fetching required for the section to render.
 
 #### Scenario: Section renders without network calls
 - **WHEN** the Skills section is rendered
-- **THEN** all categories and skill items are sourced from local hardcoded data
+- **THEN** all categories and skill items are sourced from the CV content data layer, and no request is made to fetch them
+
+#### Scenario: Skill data updates with the selected language
+- **WHEN** the visitor switches the site language while the Skills section is visible
+- **THEN** the category names and skill items update to that language's content without a page reload
+
+### Requirement: Reduced-motion reveal behavior
+When the visitor's system indicates a preference for reduced motion, skill categories and their badges SHALL be fully visible immediately, without waiting to scroll into view and without the scale/bounce pop-in animation.
+
+#### Scenario: Categories and badges appear immediately
+- **WHEN** the Skills section is rendered with `prefers-reduced-motion: reduce` in effect
+- **THEN** every skill category and its badges are fully visible in their final state immediately, with no scroll-triggered reveal delay and no scale pop-in transition

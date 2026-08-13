@@ -11,7 +11,7 @@ export default {
         border: '#dbe2de',
         text: '#101513',
         textDim: '#5b6863',
-        accent: '#1f9d5c',
+        accent: '#19804b',
         accentDim: 'rgba(31,157,92,0.10)',
         onAccent: '#ffffff',
         'dark-bg': '#0a0d0c',

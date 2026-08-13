@@ -1,15 +1,18 @@
 import { useEffect, useState } from 'react'
-import { fetchCVData } from '../lib/api.js'
+import { useLang } from '../context/AppContext.jsx'
+import { getCVData } from '../lib/api.js'
 
 export function useCVData() {
+  const { lang } = useLang()
   const [data, setData] = useState(null)
-  const [isLoading, setIsLoading] = useState(true)
+  const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
   useEffect(() => {
     let cancelled = false
+    setLoading(true)
 
-    fetchCVData()
+    getCVData(lang)
       .then((result) => {
         if (!cancelled) setData(result)
       })
@@ -17,13 +20,13 @@ export function useCVData() {
         if (!cancelled) setError(err)
       })
       .finally(() => {
-        if (!cancelled) setIsLoading(false)
+        if (!cancelled) setLoading(false)
       })
 
     return () => {
       cancelled = true
     }
-  }, [])
+  }, [lang])
 
-  return { data, isLoading, error }
+  return { data, loading, error }
 }

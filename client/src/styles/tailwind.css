@@ -39,3 +39,10 @@ body {
 .animate-pulse-ring {
   animation: pulseRing 1.5s ease-out infinite;
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-blink,
+  .animate-pulse-ring {
+    animation: none;
+  }
+}

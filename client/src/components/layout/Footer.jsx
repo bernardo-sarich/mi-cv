@@ -1,9 +1,8 @@
-import { useLang } from '../../context/AppContext.jsx'
-import cvData from '../../data/mock/cv-data.json'
+import { useCVData } from '../../hooks/useCVData.js'
 
 export default function Footer() {
-  const { lang } = useLang()
-  const firstName = (cvData[lang]?.name || '').split(' ')[0].toLowerCase()
+  const { data } = useCVData()
+  const firstName = (data?.name || '').split(' ')[0].toLowerCase()
 
   return (
     <footer className="border-t border-border dark:border-dark-border py-6 text-center">

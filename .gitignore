@@ -19,3 +19,6 @@ local.settings.json
 # OpenSpec (Claude Code)
 .claude/skills/openspec-*
 .claude/commands/opsx/
+
+# Claude Code local settings (machine-specific permissions)
+.claude/settings.local.json

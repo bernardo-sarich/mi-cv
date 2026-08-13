@@ -5,6 +5,7 @@ import Hero from './components/sections/Hero.jsx'
 import Experience from './components/sections/Experience.jsx'
 import Skills from './components/sections/Skills.jsx'
 import Projects from './components/sections/Projects.jsx'
+import Contact from './components/sections/Contact.jsx'
 import MatrixRain from './components/ui/MatrixRain.jsx'
 
 function App() {
@@ -21,7 +22,7 @@ function App() {
         <Experience />
         <Skills />
         <Projects />
-        <div id="contacto"></div>
+        <Contact />
         <Footer />
       </div>
     </AppProvider>

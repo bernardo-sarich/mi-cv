@@ -10,11 +10,19 @@
     "downloadCv": "Descargar CV",
     "viewProjects": "Ver proyectos"
   },
+  "theme": {
+    "switchToLight": "Cambiar a modo claro",
+    "switchToDark": "Cambiar a modo oscuro"
+  },
+  "lang": {
+    "switchToEn": "Switch to English",
+    "switchToEs": "Cambiar a español"
+  },
   "experience": {
     "title": "Experiencia"
   },
   "skills": {
-    "title": "Habilidades"
+    "title": "Stack técnico"
   },
   "projects": {
     "title": "Proyectos",
@@ -26,6 +34,9 @@
     "formEmail": "Correo electrónico",
     "formMessage": "Mensaje",
     "formSubmit": "Enviar",
-    "formSent": "¡Mensaje enviado!"
+    "formSent": "// mensaje enviado (demo)",
+    "linksTitle": "Links",
+    "errorRequired": "Este campo es obligatorio",
+    "errorEmail": "Ingresá un correo electrónico válido"
   }
 }

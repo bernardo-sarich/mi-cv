@@ -13,7 +13,7 @@ const LAYER_OPACITY = 0.31
 // Mirrors the `accent` / `dark-accent` tokens in tailwind.config.js. Not read
 // from CSS: index.css defines `--accent` as #aa3bff from a leftover template
 // palette, unrelated to the site's green accent.
-const ACCENT_BY_THEME = { dark: '#3ddc84', light: '#1f9d5c' }
+const ACCENT_BY_THEME = { dark: '#3ddc84', light: '#19804b' }
 
 const CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789{}[]<>/\\|=+*-#$%&@'
 
@@ -36,10 +36,7 @@ function useMediaQuery(query) {
 // includes the scrollbar while #root centers within the content box, which
 // would make the two strips asymmetric.
 function measureGutter() {
-  return Math.max(
-    0,
-    Math.floor((document.documentElement.clientWidth - APP_COLUMN_WIDTH) / 2),
-  )
+  return Math.max(0, Math.floor((document.documentElement.clientWidth - APP_COLUMN_WIDTH) / 2))
 }
 
 export default function MatrixRain({ side }) {

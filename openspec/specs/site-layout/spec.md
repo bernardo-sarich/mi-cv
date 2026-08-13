@@ -29,6 +29,13 @@ The navigation bar SHALL provide links to each main page section (sobre-mi, expe
 - **WHEN** the user activates the "experience" nav link
 - **THEN** the viewport smoothly scrolls until the section with id `experience` is in view, and the URL does not perform a full navigation/reload
 
+### Requirement: Reduced-motion anchor navigation
+When the visitor's system indicates a preference for reduced motion, activating a section anchor link in the navigation bar SHALL jump the viewport to that section immediately, with no animated scroll.
+
+#### Scenario: Nav link jumps instead of smooth-scrolling
+- **WHEN** the user activates a section anchor link in the navigation bar with `prefers-reduced-motion: reduce` in effect
+- **THEN** the viewport jumps immediately to the target section with no animated scroll
+
 ### Requirement: Locale and theme controls in nav
 The navigation bar SHALL include the language toggle and theme toggle controls, positioned so they remain reachable at every supported viewport width.
 

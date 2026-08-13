@@ -19,8 +19,7 @@ export function AppProvider({ children }) {
   const value = useMemo(
     () => ({
       theme,
-      toggleTheme: () =>
-        setTheme((current) => (current === 'dark' ? 'light' : 'dark')),
+      toggleTheme: () => setTheme((current) => (current === 'dark' ? 'light' : 'dark')),
       lang,
       toggleLang: () => setLang((current) => (current === 'es' ? 'en' : 'es')),
     }),

@@ -1,34 +1,10 @@
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { useCVData } from '../../hooks/useCVData.js'
 import SectionLabel from '../ui/SectionLabel.jsx'
+import SectionTitle from '../ui/SectionTitle.jsx'
 import Card from '../ui/Card.jsx'
 import Badge from '../ui/Badge.jsx'
-
-const PROJECTS = [
-  {
-    name: 'task-flow-api',
-    description: 'API REST para gestión de tareas con autenticación JWT y colas de trabajo.',
-    stack: ['Node.js', 'Express', 'PostgreSQL', 'Redis'],
-    repoUrl: 'https://github.com/example/task-flow-api',
-  },
-  {
-    name: 'metrics-dashboard',
-    description: 'Dashboard en tiempo real para visualizar métricas de infraestructura.',
-    stack: ['React', 'TypeScript', 'WebSockets', 'Tailwind CSS'],
-    repoUrl: 'https://github.com/example/metrics-dashboard',
-  },
-  {
-    name: 'data-pipeline',
-    description: 'Pipeline de ingesta y transformación de datos en streaming.',
-    stack: ['Python', 'Kafka', 'Docker'],
-    repoUrl: 'https://github.com/example/data-pipeline',
-  },
-  {
-    name: 'auth-service',
-    description: 'Servicio de autenticación centralizado con soporte OAuth2 y SSO.',
-    stack: ['Go', 'PostgreSQL', 'Kubernetes'],
-    repoUrl: 'https://github.com/example/auth-service',
-  },
-]
 
 function GitHubIcon(props) {
   return (
@@ -40,13 +16,11 @@ function GitHubIcon(props) {
 
 function ProjectCard({ project }) {
   return (
-    <Card
-      className="w-[300px] flex-shrink-0 snap-start p-5 transition-all duration-300 hover:scale-[1.02] hover:border-accent dark:hover:border-dark-accent hover:shadow-[0_0_20px_rgba(31,157,92,0.35)] dark:hover:shadow-[0_0_20px_rgba(61,220,132,0.35)]"
-    >
+    <Card className="w-[calc(100vw-3rem)] flex-shrink-0 snap-start p-5 transition-all duration-300 hover:scale-[1.02] hover:border-accent dark:hover:border-dark-accent hover:shadow-[0_0_20px_rgba(31,157,92,0.35)] dark:hover:shadow-[0_0_20px_rgba(61,220,132,0.35)] sm:w-[300px]">
       <h3 className="font-mono text-lg font-bold text-accent dark:text-dark-accent">
         {project.name}
       </h3>
-      <p className="mt-2 text-sm text-textDim dark:text-dark-textDim">{project.description}</p>
+      <p className="mt-2 text-sm text-textDim dark:text-dark-textDim">{project.desc}</p>
 
       <div className="mt-4 flex flex-wrap gap-1.5">
         {project.stack.map((tech) => (
@@ -55,7 +29,7 @@ function ProjectCard({ project }) {
       </div>
 
       <a
-        href={project.repoUrl}
+        href={project.link}
         target="_blank"
         rel="noopener noreferrer"
         className="mt-4 inline-flex items-center gap-1.5 text-sm text-text dark:text-dark-text hover:text-accent dark:hover:text-dark-accent"
@@ -67,33 +41,76 @@ function ProjectCard({ project }) {
   )
 }
 
-export default function Projects() {
-  const scrollerRef = useRef(null)
+// Keeps the "Anterior"/"Siguiente" buttons landing exactly on a snap point instead of
+// approximating with scrollBy — an imprecise jump can rest scroll-snap on the wrong
+// card, leaving the peek buffer that hides the next card eaten up on the wrong side.
+// The card width is responsive (one full-width card on mobile, 300px from `sm` up), so
+// the step is measured from the DOM instead of hardcoded, and the visible-card count
+// used for the last page's max index is derived from how many steps fit the scroller.
+//
+// The hover-glow buffer around the first/last card is the scroller's own left/right
+// padding (sm:px-5, zero on mobile where hover doesn't apply) rather than a spacer
+// element — padding sits inside the scroller's box so overflow-x doesn't clip it, and
+// unlike a spacer it doesn't introduce an extra flex `gap` on top of itself, so page 0
+// and every later page land on a consistent, predictable offset.
+const GAP = 16 // gap-4
 
-  const scroll = (direction) => {
-    scrollerRef.current?.scrollBy({ left: direction * 320, behavior: 'smooth' })
+function getCardStep(scroller) {
+  const firstCard = scroller?.children[0]
+  return firstCard ? firstCard.offsetWidth + GAP : 0
+}
+
+function getStartOffset(scroller) {
+  return scroller ? parseFloat(getComputedStyle(scroller).paddingLeft) || 0 : 0
+}
+
+function getVisibleCards(scroller, step) {
+  if (!scroller || !step) return 1
+  return Math.max(1, Math.round(scroller.clientWidth / step))
+}
+
+export default function Projects() {
+  const { t } = useTranslation()
+  const scrollerRef = useRef(null)
+  const { data } = useCVData()
+  const [pageIndex, setPageIndex] = useState(0)
+
+  const goToPage = (nextIndex) => {
+    const scroller = scrollerRef.current
+    const step = getCardStep(scroller)
+    const visibleCards = getVisibleCards(scroller, step)
+    const maxIndex = Math.max(0, (data?.projects.length ?? 0) - visibleCards)
+    const clamped = Math.min(Math.max(nextIndex, 0), maxIndex)
+    setPageIndex(clamped)
+    scroller?.scrollTo({
+      left: clamped === 0 ? 0 : getStartOffset(scroller) + clamped * step,
+      behavior: 'smooth',
+    })
   }
 
+  if (!data) return null
+
   return (
-    <section id="projects" className="px-4 py-8">
+    <section id="projects" className="px-6 py-8 sm:px-8">
       <div className="mx-auto max-w-5xl">
         <div className="relative">
           <SectionLabel>{'<section id="projects">'}</SectionLabel>
+          <SectionTitle>{t('projects.title')}</SectionTitle>
 
           <div className="absolute right-0 top-1/2 flex -translate-y-1/2 gap-2">
             <button
               type="button"
-              onClick={() => scroll(-1)}
+              onClick={() => goToPage(pageIndex - 1)}
               aria-label="Anterior"
-              className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-border dark:border-dark-border text-text dark:text-dark-text hover:border-accent dark:hover:border-dark-accent"
+              className="inline-flex h-9 w-9 cursor-pointer items-center justify-center rounded-md border border-border dark:border-dark-border text-text dark:text-dark-text transition-colors hover:border-accent dark:hover:border-dark-accent hover:text-accent dark:hover:text-dark-accent"
             >
               ←
             </button>
             <button
               type="button"
-              onClick={() => scroll(1)}
+              onClick={() => goToPage(pageIndex + 1)}
               aria-label="Siguiente"
-              className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-border dark:border-dark-border text-text dark:text-dark-text hover:border-accent dark:hover:border-dark-accent"
+              className="inline-flex h-9 w-9 cursor-pointer items-center justify-center rounded-md border border-border dark:border-dark-border text-text dark:text-dark-text transition-colors hover:border-accent dark:hover:border-dark-accent hover:text-accent dark:hover:text-dark-accent"
             >
               →
             </button>
@@ -102,10 +119,10 @@ export default function Projects() {
 
         <div
           ref={scrollerRef}
-          className="no-scrollbar mt-8 flex gap-4 overflow-x-auto snap-x snap-mandatory scroll-smooth py-3"
+          className="no-scrollbar mx-auto mt-8 flex max-w-[976px] gap-4 overflow-x-auto scroll-px-0 sm:scroll-px-5 snap-x snap-mandatory scroll-smooth px-0 py-3 sm:px-5"
         >
-          {PROJECTS.map((project) => (
-            <ProjectCard key={project.name} project={project} />
+          {data.projects.map((project, index) => (
+            <ProjectCard key={`${project.name}-${index}`} project={project} />
           ))}
         </div>
       </div>

@@ -1,0 +1,150 @@
+{
+  "es": {
+    "name": "Bernardo Sarich",
+    "title": "Backend Developer",
+    "bio": "Desarrollador de software especializado en backend, construyendo sistemas robustos y escalables. Placeholder — se reemplaza con datos reales en la capa de datos.",
+    "stats": [{ "value": 7, "suffix": "+", "label": "años de experiencia" }],
+    "experience": [
+      {
+        "company": "Acme Corp",
+        "role": "Backend Developer",
+        "dates": "2022 — presente",
+        "bullets": [
+          "Diseñé e implementé servicios REST de alta disponibilidad.",
+          "Reduje el tiempo de respuesta promedio en un 40% mediante optimización de queries.",
+          "Lideré la migración de infraestructura a contenedores."
+        ]
+      },
+      {
+        "company": "Beta Labs",
+        "role": "Software Engineer",
+        "dates": "2020 — 2022",
+        "bullets": [
+          "Desarrollé pipelines de datos para procesamiento en tiempo real.",
+          "Colaboré en el diseño de una arquitectura de microservicios.",
+          "Mentoreé a desarrolladores junior del equipo."
+        ]
+      },
+      {
+        "company": "Gamma Software",
+        "role": "Junior Developer",
+        "dates": "2018 — 2020",
+        "bullets": [
+          "Construí features end-to-end sobre una aplicación monolítica.",
+          "Escribí pruebas automatizadas que elevaron la cobertura del proyecto."
+        ]
+      }
+    ],
+    "skills": [
+      { "name": "Languages", "items": ["JavaScript", "TypeScript", "Python", "Go", "SQL"] },
+      { "name": "Frameworks", "items": ["React", "Node.js", "Express", "Django", "Tailwind CSS"] },
+      { "name": "Infra", "items": ["Docker", "AWS", "Kubernetes", "GitHub Actions", "Nginx"] },
+      { "name": "Data", "items": ["PostgreSQL", "Redis", "MongoDB", "Kafka"] }
+    ],
+    "projects": [
+      {
+        "name": "task-flow-api",
+        "desc": "API REST para gestión de tareas con autenticación JWT y colas de trabajo.",
+        "stack": ["Node.js", "Express", "PostgreSQL", "Redis"],
+        "link": "https://github.com/example/task-flow-api"
+      },
+      {
+        "name": "metrics-dashboard",
+        "desc": "Dashboard en tiempo real para visualizar métricas de infraestructura.",
+        "stack": ["React", "TypeScript", "WebSockets", "Tailwind CSS"],
+        "link": "https://github.com/example/metrics-dashboard"
+      },
+      {
+        "name": "data-pipeline",
+        "desc": "Pipeline de ingesta y transformación de datos en streaming.",
+        "stack": ["Python", "Kafka", "Docker"],
+        "link": "https://github.com/example/data-pipeline"
+      },
+      {
+        "name": "auth-service",
+        "desc": "Servicio de autenticación centralizado con soporte OAuth2 y SSO.",
+        "stack": ["Go", "PostgreSQL", "Kubernetes"],
+        "link": "https://github.com/example/auth-service"
+      }
+    ],
+    "contact": {
+      "github": "https://github.com/tu-usuario",
+      "linkedin": "https://linkedin.com/in/tu-usuario",
+      "email": "hola@tu-dominio.com"
+    }
+  },
+  "en": {
+    "name": "Bernardo Sarich",
+    "title": "Backend Developer",
+    "bio": "Backend-focused software developer building robust, scalable systems. Placeholder — replaced with real data in the data layer.",
+    "stats": [{ "value": 7, "suffix": "+", "label": "years of experience" }],
+    "experience": [
+      {
+        "company": "Acme Corp",
+        "role": "Backend Developer",
+        "dates": "2022 — present",
+        "bullets": [
+          "Designed and implemented highly available REST services.",
+          "Cut average response time by 40% through query optimization.",
+          "Led the migration of infrastructure to containers."
+        ]
+      },
+      {
+        "company": "Beta Labs",
+        "role": "Software Engineer",
+        "dates": "2020 — 2022",
+        "bullets": [
+          "Built data pipelines for real-time processing.",
+          "Collaborated on the design of a microservices architecture.",
+          "Mentored junior developers on the team."
+        ]
+      },
+      {
+        "company": "Gamma Software",
+        "role": "Junior Developer",
+        "dates": "2018 — 2020",
+        "bullets": [
+          "Built end-to-end features on a monolithic application.",
+          "Wrote automated tests that raised the project's coverage."
+        ]
+      }
+    ],
+    "skills": [
+      { "name": "Languages", "items": ["JavaScript", "TypeScript", "Python", "Go", "SQL"] },
+      { "name": "Frameworks", "items": ["React", "Node.js", "Express", "Django", "Tailwind CSS"] },
+      { "name": "Infra", "items": ["Docker", "AWS", "Kubernetes", "GitHub Actions", "Nginx"] },
+      { "name": "Data", "items": ["PostgreSQL", "Redis", "MongoDB", "Kafka"] }
+    ],
+    "projects": [
+      {
+        "name": "task-flow-api",
+        "desc": "REST API for task management with JWT authentication and job queues.",
+        "stack": ["Node.js", "Express", "PostgreSQL", "Redis"],
+        "link": "https://github.com/example/task-flow-api"
+      },
+      {
+        "name": "metrics-dashboard",
+        "desc": "Real-time dashboard for visualizing infrastructure metrics.",
+        "stack": ["React", "TypeScript", "WebSockets", "Tailwind CSS"],
+        "link": "https://github.com/example/metrics-dashboard"
+      },
+      {
+        "name": "data-pipeline",
+        "desc": "Streaming data ingestion and transformation pipeline.",
+        "stack": ["Python", "Kafka", "Docker"],
+        "link": "https://github.com/example/data-pipeline"
+      },
+      {
+        "name": "auth-service",
+        "desc": "Centralized authentication service with OAuth2 and SSO support.",
+        "stack": ["Go", "PostgreSQL", "Kubernetes"],
+        "link": "https://github.com/example/auth-service"
+      }
+    ],
+    "contact": {
+      "github": "https://github.com/tu-usuario",
+      "linkedin": "https://linkedin.com/in/tu-usuario",
+      "email": "hola@tu-dominio.com"
+    }
+  }
+}

@@ -22,11 +22,11 @@ The Hero section SHALL render a terminal-style block containing a static line `$
 - **THEN** the block cursor `▍` continues to toggle between visible and hidden on a fixed interval, with no defined end state
 
 ### Requirement: Name, online status, and role
-The Hero section SHALL display the site owner's name as a top-level heading in the site's monospace font, an "online" status indicator consisting of an accent-colored dot with an expanding pulse/ring effect plus the label "online", and a role badge using the `accentDim` background and `accent` text tokens.
+The Hero section SHALL display the site owner's name (sourced from the CV content data) as a top-level heading in the site's monospace font, an "online" status indicator consisting of an accent-colored dot with an expanding pulse/ring effect plus the label "online", and a role badge (sourced from the CV content data) using the `accentDim` background and `accent` text tokens.
 
 #### Scenario: Name renders as a prominent mono heading
 - **WHEN** the Hero section is rendered
-- **THEN** the owner's name is shown as a level-1 heading in the `mono` font family, at a large, bold weight
+- **THEN** the owner's name from the CV content data is shown as a level-1 heading in the `mono` font family, at a large, bold weight
 
 #### Scenario: Online indicator pulses continuously
 - **WHEN** the Hero section is rendered
@@ -34,14 +34,18 @@ The Hero section SHALL display the site owner's name as a top-level heading in t
 
 #### Scenario: Role badge uses accent tokens
 - **WHEN** the Hero section is rendered
-- **THEN** a badge showing the owner's role (e.g. "Backend Developer") is displayed with the `accentDim` token as background and `accent` token as text color
+- **THEN** a badge showing the owner's role from the CV content data is displayed with the `accentDim` token as background and `accent` token as text color
 
 ### Requirement: Bio paragraph
-The Hero section SHALL display a short bio paragraph beneath the name/status/role header, using placeholder text until real CV data is wired in.
+The Hero section SHALL display the bio paragraph from the CV content data beneath the name/status/role header.
 
 #### Scenario: Bio text is visible
 - **WHEN** the Hero section is rendered
-- **THEN** a paragraph of introductory bio text is shown below the name/status/role header
+- **THEN** a paragraph of introductory bio text from the CV content data is shown below the name/status/role header
+
+#### Scenario: Bio text updates with the selected language
+- **WHEN** the visitor switches the site language while the Hero section is visible
+- **THEN** the bio paragraph updates to that language's bio text without a page reload
 
 ### Requirement: Primary call-to-action buttons
 The Hero section SHALL render two call-to-action buttons: a primary-styled "Descargar CV" button with no attached download behavior, and a secondary-styled "Ver proyectos →" button that smoothly scrolls the viewport to the `projects` section when activated.
@@ -55,11 +59,11 @@ The Hero section SHALL render two call-to-action buttons: a primary-styled "Desc
 - **THEN** the viewport smoothly scrolls until the section with id `projects` is in view, without a full page reload
 
 ### Requirement: Animated stats row
-The Hero section SHALL display a row of one or more stats (e.g. "7+ años de experiencia"), each with a numeric value that animates upward from 0 to its final value once the Hero section becomes visible in the viewport, and does not animate before that point.
+The Hero section SHALL display a row of one or more stats from the CV content data, each with a numeric value that animates upward from 0 to its final value once the Hero section becomes visible in the viewport, and does not animate before that point.
 
 #### Scenario: Stat count-up triggers on entering the viewport
 - **WHEN** the Hero section's stats row scrolls into the viewport for the first time
-- **THEN** each stat's displayed number animates from 0 up to its configured final value
+- **THEN** each stat's displayed number animates from 0 up to its final value from the CV content data
 
 #### Scenario: Stat count-up does not run before the section is visible
 - **WHEN** the Hero section's stats row has not yet entered the viewport
@@ -75,3 +79,18 @@ The Hero section's major blocks (terminal, name/status/role, bio, and the stats/
 #### Scenario: Blocks animate in a staggered sequence within each column
 - **WHEN** the Hero section's entrance animation plays
 - **THEN** within a column, each block's animation begins after a short, consistent delay relative to the block above it, rather than that column's blocks animating simultaneously
+
+### Requirement: Reduced-motion entrance and interaction behavior
+When the visitor's system indicates a preference for reduced motion, the Hero section's staggered entrance animation, the "online" indicator's pulse/ring effect, and the "Ver proyectos →" button's scroll behavior SHALL each present their final/target state immediately, with no animated transition, instead of their normal animated behavior.
+
+#### Scenario: Blocks appear immediately instead of staggering in
+- **WHEN** the Hero section mounts with `prefers-reduced-motion: reduce` in effect
+- **THEN** the terminal, name/status/role, bio, and stats/call-to-action blocks are all fully visible and in their final position immediately, with no fade-in, slide-up, or stagger delay
+
+#### Scenario: Online indicator does not pulse
+- **WHEN** the Hero section is rendered with `prefers-reduced-motion: reduce` in effect
+- **THEN** the accent-colored status dot is shown without the expanding-ring pulse animation
+
+#### Scenario: View projects button jumps instead of smooth-scrolling
+- **WHEN** the user activates the "Ver proyectos →" button with `prefers-reduced-motion: reduce` in effect
+- **THEN** the viewport jumps immediately to the `projects` section with no animated scroll

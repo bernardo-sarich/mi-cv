@@ -25,15 +25,19 @@ The Experience section SHALL render a vertical timeline consisting of a static f
 - **THEN** the accent-colored progress line's height increases proportionally, reaching 100% once the section has fully passed through the tracked viewport range
 
 ### Requirement: Job entries
-The Experience section SHALL render a list of job entries (placeholder hardcoded data with 3 example jobs), each displaying: a small pulsing accent-colored dot positioned on the timeline, a date range (e.g. "2022 — presente") in small accent-colored text, a role and company name, and a bulleted list of achievements.
+The Experience section SHALL render the list of job entries from the CV content data, each displaying: a small pulsing accent-colored dot positioned on the timeline, a date range (e.g. "2022 — presente") in small accent-colored text, a role and company name, and a bulleted list of achievements.
 
 #### Scenario: Each job renders its required elements
 - **WHEN** a job entry is rendered
-- **THEN** it shows a timeline dot with a pulse effect, an accent-colored date range, the role and company, and a bulleted list of achievement items
+- **THEN** it shows a timeline dot with a pulse effect, an accent-colored date range, the role and company, and a bulleted list of achievement items, all sourced from the CV content data
 
 #### Scenario: Timeline dot pulses continuously
 - **WHEN** a job entry's timeline dot is rendered
 - **THEN** the dot displays a continuously repeating, subtle pulse animation
+
+#### Scenario: Job list updates with the selected language
+- **WHEN** the visitor switches the site language while the Experience section is visible
+- **THEN** the job entries' role, company, dates, and bullets update to that language's content without a page reload
 
 ### Requirement: Scroll-triggered job reveal
 Each job entry SHALL be visually hidden (transparent, offset downward) until it scrolls into the central band of the viewport, at which point it SHALL animate to fully visible with a fade-in and slide-up transition, so entries reveal one at a time as the visitor scrolls rather than all at once.
@@ -52,3 +56,18 @@ Within a revealed job entry, its achievement bullets SHALL animate in sequential
 #### Scenario: Bullets cascade in sequence
 - **WHEN** a job entry becomes visible and its bullets animate in
 - **THEN** each bullet's entrance animation begins approximately 0.12 seconds after the previous bullet's, in list order
+
+### Requirement: Reduced-motion reveal and pulse behavior
+When the visitor's system indicates a preference for reduced motion, each job entry SHALL be fully visible immediately rather than waiting to scroll into the central band of the viewport, its achievement bullets SHALL all be visible at once rather than cascading in sequentially, and timeline dots SHALL be shown without their pulse animation.
+
+#### Scenario: Job entries are visible immediately
+- **WHEN** the Experience section is rendered with `prefers-reduced-motion: reduce` in effect
+- **THEN** every job entry is fully opaque and in its final position without waiting for scroll position, and with no fade-in or slide-up transition
+
+#### Scenario: Bullets appear together instead of cascading
+- **WHEN** a job entry is rendered with `prefers-reduced-motion: reduce` in effect
+- **THEN** all of its achievement bullets are visible at once, with no per-bullet stagger delay
+
+#### Scenario: Timeline dots do not pulse
+- **WHEN** a job entry's timeline dot is rendered with `prefers-reduced-motion: reduce` in effect
+- **THEN** the dot is shown without the repeating pulse animation
