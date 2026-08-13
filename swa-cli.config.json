@@ -3,7 +3,7 @@
   "configurations": {
     "mi-cv": {
       "appLocation": "client",
-      "apiLocation": "api",
+      "apiLocation": "api/Api",
       "outputLocation": "dist",
       "apiLanguage": "dotnetisolated",
       "apiVersion": "8.0",

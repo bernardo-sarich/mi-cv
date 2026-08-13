@@ -20,6 +20,15 @@ Azure Static Web Apps project with two independent builds, wired together by `sw
 - `api/` — Azure Functions, .NET isolated worker on `net10.0`. Currently a single placeholder HTTP trigger (`ProfileFunction`) that returns a string; the `/api/cv` endpoint the client calls does not exist yet.
 - `openspec/` — spec-driven planning artifacts (see below).
 
+## Backend architecture
+
+- **Capas**: `Api` (Functions, delgado) → `Application` (casos de uso) → `Domain` (entidades de negocio + puertos) → `Infrastructure` (EF Core, implementa los puertos). Nomenclatura estándar de Clean/Hexagonal Architecture — equivalente a lo que en tu monolito anterior eran `Agent - Service - Logic - Adapter`.
+- **Base de datos**: Azure SQL Database, *free offer* (serverless, gratis persistente), EF Core vía `Microsoft.EntityFrameworkCore.SqlServer`.
+- **Modelo de datos**: relacional (no JSON-blob) — entidades separadas por tipo (`Profile`, `Experience`, `Project`, `SkillCategory`, `Stat`, `ContactMessage`), cada una en Domain con su propia tabla vía EF migrations.
+- **Alcance**: incluye endpoint de lectura del CV (`GET /api/cv`) y formulario de contacto con escritura (`POST /api/contact`).
+- **Tests**: unitarios (Domain/Application con los puertos mockeados) e integración (Infrastructure contra una DB real/en contenedor, y Api de punta a punta).
+- **Audiencia del repo**: tanto scan rápido (recruiters) como revisión técnica profunda — por eso el plan incluye README/ADRs (para el scan) y tests + manejo de errores + CI (para la revisión profunda).
+
 ## Commands
 
 ```bash

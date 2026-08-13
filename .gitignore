@@ -22,3 +22,5 @@ local.settings.json
 
 # Claude Code local settings (machine-specific permissions)
 .claude/settings.local.json
+backend-plan-tareas.md
+backend-exploracion-notas.md

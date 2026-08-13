@@ -1,4 +1,6 @@
+using Application;
 using Azure.Monitor.OpenTelemetry.Exporter;
+using Infrastructure;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Builder;
 using Microsoft.Azure.Functions.Worker.OpenTelemetry;
@@ -16,5 +18,8 @@ if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("APPLICATIONINSIGHT
         .UseFunctionsWorkerDefaults()
         .UseAzureMonitorExporter();
 }
+
+builder.Services.AddApplication();
+builder.Services.AddInfrastructure();
 
 builder.Build().Run();
