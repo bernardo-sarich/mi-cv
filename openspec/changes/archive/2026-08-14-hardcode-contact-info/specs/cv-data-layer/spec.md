@@ -1,10 +1,4 @@
-# cv-data-layer Specification
-
-## Purpose
-
-Provides the single source of bilingual CV content and the accessor/hook that section components use to read it, structured so a future real API can be swapped in behind the same interface without touching consuming components.
-
-## Requirements
+## MODIFIED Requirements
 
 ### Requirement: Bilingual content structure
 The system SHALL store all person-specific CV content in one local data source keyed by the two supported language codes (`es`, `en`), with each language entry containing: `bio`, `stats`, `experience`, `skills`, and `projects`. Contact information (GitHub/LinkedIn/email) is not part of this content source; it is provided by a separate, dedicated client-side source outside this capability.
@@ -27,21 +21,3 @@ The system SHALL provide a function that, given a requested language code, retur
 #### Scenario: API failure falls back to local mock content
 - **WHEN** the accessor is called with a supported language code and the API request fails (network error or non-2xx response)
 - **THEN** the accessor returns that language's content from the local mock data instead of throwing or returning nothing
-
-### Requirement: Section content hook
-The system SHALL expose CV content to section components through a hook that returns the current language's content, a loading indicator, and an error value.
-
-#### Scenario: Hook exposes data, loading, and error
-- **WHEN** a section component calls the content hook
-- **THEN** it receives an object with `data`, `loading`, and `error` fields reflecting the current state of the content request
-
-#### Scenario: Content updates when the visitor switches language
-- **WHEN** the visitor toggles the site language while a section using the hook is mounted
-- **THEN** the hook returns the newly selected language's content without requiring a page reload
-
-### Requirement: No component reads the data file directly
-Section components SHALL obtain CV content only through the section content hook, never by importing the underlying data file.
-
-#### Scenario: Section components have no direct data import
-- **WHEN** the Hero, Experience, Skills, Projects, or Contact component source is inspected
-- **THEN** none of them import the CV content data file directly; each obtains content through the hook

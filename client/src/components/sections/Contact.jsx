@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
-import { useCVData } from '../../hooks/useCVData.js'
+import { useLang } from '../../context/AppContext.jsx'
+import { CONTACT_INFO } from '../../data/contact-info.js'
 import SectionLabel from '../ui/SectionLabel.jsx'
 import SectionTitle from '../ui/SectionTitle.jsx'
 import Card from '../ui/Card.jsx'
@@ -131,7 +132,7 @@ function ContactLink({ link }) {
 
 export default function Contact() {
   const { t } = useTranslation()
-  const { data } = useCVData()
+  const { lang } = useLang()
   const [form, setForm] = useState(EMPTY_FORM)
   const [errors, setErrors] = useState(EMPTY_ERRORS)
   const [sent, setSent] = useState(false)
@@ -185,9 +186,7 @@ export default function Contact() {
     sentTimerRef.current = setTimeout(() => setSent(false), 4000)
   }
 
-  if (!data) return null
-
-  const contactLinks = buildContactLinks(data.contact)
+  const contactLinks = buildContactLinks(CONTACT_INFO[lang])
 
   return (
     <section id="contacto" className="px-6 py-8 sm:px-8">

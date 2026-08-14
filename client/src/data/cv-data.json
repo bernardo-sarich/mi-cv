@@ -1,150 +1,123 @@
 {
   "es": {
     "name": "Bernardo Sarich",
-    "title": "Backend Developer",
-    "bio": "Desarrollador de software especializado en backend, construyendo sistemas robustos y escalables. Placeholder — se reemplaza con datos reales en la capa de datos.",
-    "stats": [{ "value": 7, "suffix": "+", "label": "años de experiencia" }],
+    "title": "Backend Developer | Desarrollo asistido por IA",
+    "bio": "Desarrollador Backend .NET especializado en sistemas empresariales críticos, integraciones y automatización del desarrollo con IA.",
+    "stats": [{ "value": 8, "suffix": "+", "label": "años de experiencia" }],
     "experience": [
       {
-        "company": "Acme Corp",
+        "company": "FyO",
         "role": "Backend Developer",
-        "dates": "2022 — presente",
-        "bullets": [
-          "Diseñé e implementé servicios REST de alta disponibilidad.",
-          "Reduje el tiempo de respuesta promedio en un 40% mediante optimización de queries.",
-          "Lideré la migración de infraestructura a contenedores."
+        "dates": "2021 — presente",
+        "bullets": [         
+          "Impulsé la adopción de desarrollo asistido por IA dentro de mi organización. Escribí la documentación que lo sustentaba, financié mi propio piloto y capacité a desarrolladores de otros equipos — lo que empezó como una iniciativa personal hoy es política oficial de la empresa.",
+          "Diseñé y construí 17 herramientas de automatización con IA (Claude Code) que agilizan tareas repetitivas del desarrollo —como un ABM completo, que bajó de 10 horas a 20 minutos—, liberando tiempo para resolver problemas de mayor valor; hoy las usan activamente 7 desarrolladores de 3 equipos distintos, incluyendo dos arquitectos.",
+          "Implementé la comunicación del Gestor de Órdenes de Desvíos y Fijaciones en uno de los dos sistemas involucrados, integrándolo con Azure Service Bus. Evitó la carga manual duplicada de 1.125 Desvíos y 5.263 Fijaciones en lo que va de 2026, un ahorro estimado de 689 horas de trabajo manual.",
+          "Diseñé e implementé el Proceso Automático de Facturación de Secadas, que ejecuta a diario algoritmos de cálculo complejos; emitió automáticamente más de 800 facturas en los ultimos 4 meses, sin intervención manual del usuario."
         ]
       },
       {
-        "company": "Beta Labs",
-        "role": "Software Engineer",
-        "dates": "2020 — 2022",
+        "company": "DataOil SRL",
+        "role": "Software Developer",
+        "dates": "2019 — 2021",
         "bullets": [
-          "Desarrollé pipelines de datos para procesamiento en tiempo real.",
-          "Colaboré en el diseño de una arquitectura de microservicios.",
-          "Mentoreé a desarrolladores junior del equipo."
+          "Diseñé e implementé la integración entre los surtidores de combustible y el sistema de gestión de la estación, habilitando el despacho de combustible mediante pulseras RFID asignadas a cada empleado, lo que permitió al propietario identificar con precisión a dónde se destinaba cada litro de combustible y quién lo retiraba.",
+          "Desarrollé la integración entre el sistema de gestión de las estaciones y la aplicación móvil de YPF, habilitando un nuevo medio de pago para los clientes y aumentando la facturación de la estación.",
+          "Migré uno de los sistemas core de la compañía (utilizado en empresas como Techint) a un stack técnico más moderno."
         ]
       },
       {
-        "company": "Gamma Software",
+        "company": "GT-Sistemas",
         "role": "Junior Developer",
-        "dates": "2018 — 2020",
+        "dates": "2018 — 2019",
         "bullets": [
-          "Construí features end-to-end sobre una aplicación monolítica.",
-          "Escribí pruebas automatizadas que elevaron la cobertura del proyecto."
+          "Colaboré en el diseño y desarrollo de nuevos sistemas.",
+          "Desarrollé nuevos módulos en sistemas existentes."
         ]
       }
     ],
     "skills": [
-      { "name": "Languages", "items": ["JavaScript", "TypeScript", "Python", "Go", "SQL"] },
-      { "name": "Frameworks", "items": ["React", "Node.js", "Express", "Django", "Tailwind CSS"] },
-      { "name": "Infra", "items": ["Docker", "AWS", "Kubernetes", "GitHub Actions", "Nginx"] },
-      { "name": "Data", "items": ["PostgreSQL", "Redis", "MongoDB", "Kafka"] }
+      { "name": "Languages", "items": ["C#", "VB.NET", "SQL"] },
+      { "name": "Frameworks", "items": [".NET / .NET Core", "EF / EF Core", "WPF"] },
+      { "name": "Infra", "items": ["Azure", "Azure DevOps"] },
+      { "name": "Data", "items": ["SQL Server", "Azure Service Bus"] },
+      { "name": "IA", "items": ["Claude Code", "SDD"] }
     ],
     "projects": [
       {
-        "name": "task-flow-api",
-        "desc": "API REST para gestión de tareas con autenticación JWT y colas de trabajo.",
-        "stack": ["Node.js", "Express", "PostgreSQL", "Redis"],
-        "link": "https://github.com/example/task-flow-api"
+        "name": "mi-cv",
+        "desc": "CV en línea.",
+        "stack": ["React", "Tailwind CSS", "C#", "Azure Static Web Apps", 
+                  ".NET Core", "EF Core", "Clean Architecture", "Azure SQL Database", "HTML"],
+        "link": "https://github.com/bernardo-sarich/mi-cv"
       },
       {
-        "name": "metrics-dashboard",
-        "desc": "Dashboard en tiempo real para visualizar métricas de infraestructura.",
-        "stack": ["React", "TypeScript", "WebSockets", "Tailwind CSS"],
-        "link": "https://github.com/example/metrics-dashboard"
-      },
-      {
-        "name": "data-pipeline",
-        "desc": "Pipeline de ingesta y transformación de datos en streaming.",
-        "stack": ["Python", "Kafka", "Docker"],
-        "link": "https://github.com/example/data-pipeline"
-      },
-      {
-        "name": "auth-service",
-        "desc": "Servicio de autenticación centralizado con soporte OAuth2 y SSO.",
-        "stack": ["Go", "PostgreSQL", "Kubernetes"],
-        "link": "https://github.com/example/auth-service"
+        "name": "block-and-blood",
+        "desc": "Proyecto de juego TD con elementos roguelike. - Work in progress.",
+        "stack": ["Unity", "C#"],
+        "link": "https://github.com/bernardo-sarich/BlockAndBlood"
       }
-    ],
-    "contact": {
-      "github": "https://github.com/tu-usuario",
-      "linkedin": "https://linkedin.com/in/tu-usuario",
-      "email": "hola@tu-dominio.com"
-    }
+    ]
   },
-  "en": {
-    "name": "Bernardo Sarich",
-    "title": "Backend Developer",
-    "bio": "Backend-focused software developer building robust, scalable systems. Placeholder — replaced with real data in the data layer.",
-    "stats": [{ "value": 7, "suffix": "+", "label": "years of experience" }],
-    "experience": [
-      {
-        "company": "Acme Corp",
-        "role": "Backend Developer",
-        "dates": "2022 — present",
-        "bullets": [
-          "Designed and implemented highly available REST services.",
-          "Cut average response time by 40% through query optimization.",
-          "Led the migration of infrastructure to containers."
-        ]
-      },
-      {
-        "company": "Beta Labs",
-        "role": "Software Engineer",
-        "dates": "2020 — 2022",
-        "bullets": [
-          "Built data pipelines for real-time processing.",
-          "Collaborated on the design of a microservices architecture.",
-          "Mentored junior developers on the team."
-        ]
-      },
-      {
-        "company": "Gamma Software",
-        "role": "Junior Developer",
-        "dates": "2018 — 2020",
-        "bullets": [
-          "Built end-to-end features on a monolithic application.",
-          "Wrote automated tests that raised the project's coverage."
-        ]
-      }
-    ],
-    "skills": [
-      { "name": "Languages", "items": ["JavaScript", "TypeScript", "Python", "Go", "SQL"] },
-      { "name": "Frameworks", "items": ["React", "Node.js", "Express", "Django", "Tailwind CSS"] },
-      { "name": "Infra", "items": ["Docker", "AWS", "Kubernetes", "GitHub Actions", "Nginx"] },
-      { "name": "Data", "items": ["PostgreSQL", "Redis", "MongoDB", "Kafka"] }
-    ],
-    "projects": [
-      {
-        "name": "task-flow-api",
-        "desc": "REST API for task management with JWT authentication and job queues.",
-        "stack": ["Node.js", "Express", "PostgreSQL", "Redis"],
-        "link": "https://github.com/example/task-flow-api"
-      },
-      {
-        "name": "metrics-dashboard",
-        "desc": "Real-time dashboard for visualizing infrastructure metrics.",
-        "stack": ["React", "TypeScript", "WebSockets", "Tailwind CSS"],
-        "link": "https://github.com/example/metrics-dashboard"
-      },
-      {
-        "name": "data-pipeline",
-        "desc": "Streaming data ingestion and transformation pipeline.",
-        "stack": ["Python", "Kafka", "Docker"],
-        "link": "https://github.com/example/data-pipeline"
-      },
-      {
-        "name": "auth-service",
-        "desc": "Centralized authentication service with OAuth2 and SSO support.",
-        "stack": ["Go", "PostgreSQL", "Kubernetes"],
-        "link": "https://github.com/example/auth-service"
-      }
-    ],
-    "contact": {
-      "github": "https://github.com/tu-usuario",
-      "linkedin": "https://linkedin.com/in/tu-usuario",
-      "email": "hola@tu-dominio.com"
+
+ "en": {
+  "name": "Bernardo Sarich",
+  "title": "Backend Developer | AI-assisted Development",
+  "bio": "Backend .NET Developer specialized in critical enterprise systems, integrations, and AI-driven development automation.",
+  "stats": [{ "value": 8, "suffix": "+", "label": "years of experience" }],
+  "experience": [
+    {
+      "company": "FyO",
+      "role": "Backend Developer",
+      "dates": "2021 — present",
+      "bullets": [
+        "Drove the adoption of AI-assisted development within my organization. Wrote the documentation that supported it, self-funded my own pilot, and trained developers from other teams — what started as a personal initiative is now official company policy.",
+        "Designed and built 17 AI-powered automation tools (Claude Code) that streamline repetitive development tasks — including a full CRUD module that went from 10 hours down to 20 minutes — freeing up time to focus on higher-value problems; they're now actively used by 7 developers across 3 different teams, including two architects.",
+        "Implemented communication for the Diversions and Fixations Order Manager across one of the two systems involved, integrating it with Azure Service Bus. This avoided duplicate manual entry of 1,125 Diversions and 5,263 Fixations so far in 2026, an estimated saving of 689 hours of manual work.",
+        "Designed and implemented the Automatic Drying Invoicing Process, which runs complex calculation algorithms daily; it automatically issued over 800 invoices in the last 4 months with no manual user intervention."
+      ]
+    },
+    {
+      "company": "DataOil SRL",
+      "role": "Software Developer",
+      "dates": "2019 — 2021",
+      "bullets": [
+        "Designed and implemented the integration between fuel pumps and the station management system, enabling fuel dispensing via RFID wristbands assigned to each employee, which allowed the owner to precisely track where each liter of fuel went and who withdrew it.",
+        "Developed the integration between the stations' management system and the YPF mobile app, enabling a new payment method for customers and increasing station revenue.",
+        "Migrated one of the company's core systems (used by companies such as Techint) to a more modern technical stack."
+      ]
+    },
+    {
+      "company": "GT-Sistemas",
+      "role": "Junior Developer",
+      "dates": "2018 — 2019",
+      "bullets": [
+        "Collaborated on the design and development of new systems.",
+        "Developed new modules for existing systems."
+      ]
     }
-  }
+  ],
+  "skills": [
+    { "name": "Languages", "items": ["C#", "VB.NET", "SQL"] },
+    { "name": "Frameworks", "items": [".NET / .NET Core", "EF / EF Core", "WPF"] },
+    { "name": "Infra", "items": ["Azure", "Azure DevOps"] },
+    { "name": "Data", "items": ["SQL Server", "Azure Service Bus"] },
+    { "name": "AI", "items": ["Claude Code", "SDD"] }
+  ],
+  "projects": [
+    {
+      "name": "mi-cv",
+      "desc": "Online CV.",
+      "stack": ["React", "Tailwind CSS", "C#", "Azure Static Web Apps",
+                ".NET Core", "EF Core", "Clean Architecture", "Azure SQL Database", "HTML"],
+      "link": "https://github.com/bernardo-sarich/mi-cv"
+    },
+    {
+      "name": "block-and-blood",
+      "desc": "TD game project with roguelike elements. - Work in progress.",
+      "stack": ["Unity", "C#"],
+      "link": "https://github.com/bernardo-sarich/BlockAndBlood"
+    }
+  ]
+}
 }

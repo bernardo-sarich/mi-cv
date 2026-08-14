@@ -1,0 +1,10 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated"
+  },
+  "ConnectionStrings": {
+    "CvDatabase": "Server=localhost;Database=CvDatabase;Trusted_Connection=True;TrustServerCertificate=True;"
+  }
+}
