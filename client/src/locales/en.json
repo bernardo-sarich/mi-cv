@@ -1,7 +1,4 @@
 {
-  "loading": {
-    "cv": "connecting to the API..."
-  },
   "nav": {
     "about": "About",
     "experience": "Experience",
