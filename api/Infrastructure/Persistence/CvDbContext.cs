@@ -12,6 +12,7 @@ public class CvDbContext(DbContextOptions<CvDbContext> options) : DbContext(opti
     public DbSet<SkillCategoryEntity> SkillCategories => Set<SkillCategoryEntity>();
     public DbSet<StatEntity> Stats => Set<StatEntity>();
     public DbSet<ContactMessageEntity> ContactMessages => Set<ContactMessageEntity>();
+    public DbSet<ContactAttemptEntity> ContactAttempts => Set<ContactAttemptEntity>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -86,6 +87,13 @@ public class CvDbContext(DbContextOptions<CvDbContext> options) : DbContext(opti
             builder.Property(c => c.Name).IsRequired();
             builder.Property(c => c.Email).IsRequired();
             builder.Property(c => c.Message).IsRequired();
+        });
+
+        modelBuilder.Entity<ContactAttemptEntity>(builder =>
+        {
+            builder.HasKey(c => c.Id);
+            builder.Property(c => c.IpAddress).IsRequired();
+            builder.HasIndex(c => new { c.IpAddress, c.AttemptedAt });
         });
     }
 }

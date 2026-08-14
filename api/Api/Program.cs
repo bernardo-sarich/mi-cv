@@ -1,3 +1,4 @@
+using Api.Cors;
 using Application;
 using Azure.Monitor.OpenTelemetry.Exporter;
 using Infrastructure;
@@ -21,5 +22,8 @@ if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("APPLICATIONINSIGHT
 
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.AddOptions<CorsOptions>().Bind(builder.Configuration.GetSection(CorsOptions.SectionName));
+builder.Services.AddSingleton<CorsHeaderWriter>();
+builder.Services.AddOptions<RateLimitOptions>().Bind(builder.Configuration.GetSection(RateLimitOptions.SectionName));
 
 builder.Build().Run();

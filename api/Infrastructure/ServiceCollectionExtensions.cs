@@ -15,6 +15,7 @@ public static class ServiceCollectionExtensions
 
         services.AddScoped<ICvRepository, EfCvRepository>();
         services.AddScoped<IContactRepository, EfContactRepository>();
+        services.AddScoped<IContactAttemptStore, EfContactAttemptStore>();
 
         return services;
     }
