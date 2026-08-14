@@ -15,6 +15,7 @@ function GitHubIcon(props) {
 }
 
 function ProjectCard({ project }) {
+  const { t } = useTranslation()
   return (
     <Card className="w-[calc(100vw-3rem)] flex-shrink-0 snap-start p-5 transition-all duration-300 hover:scale-[1.02] hover:border-accent dark:hover:border-dark-accent hover:shadow-[0_0_20px_rgba(31,157,92,0.35)] dark:hover:shadow-[0_0_20px_rgba(61,220,132,0.35)] sm:w-[300px]">
       <h3 className="font-mono text-lg font-bold text-accent dark:text-dark-accent">
@@ -35,7 +36,7 @@ function ProjectCard({ project }) {
         className="mt-4 inline-flex items-center gap-1.5 text-sm text-text dark:text-dark-text hover:text-accent dark:hover:text-dark-accent"
       >
         <GitHubIcon />
-        Ver repo
+        {t('projects.viewRepo')}
       </a>
     </Card>
   )

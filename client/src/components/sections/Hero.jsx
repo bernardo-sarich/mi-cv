@@ -40,10 +40,11 @@ function Stat({ value, suffix, label, start }) {
 export default function Hero() {
   const { t } = useTranslation()
   const typed = useTypingEffect('who-am-i', 70)
+  const { data } = useCVData()
+  const typedBio = useTypingEffect(data?.bio, 45)
   const [statsRef, statsVisible] = useScrollReveal('hero-stats', {
     threshold: 0.3,
   })
-  const { data } = useCVData()
   const { lang } = useLang()
   const reduced = useReducedMotion()
   const containerVariants = getContainerVariants(reduced)
@@ -90,7 +91,7 @@ export default function Hero() {
             variants={blockVariants}
             className="max-w-prose text-textDim dark:text-dark-textDim"
           >
-            {data.bio}
+            {reduced ? data.bio : typedBio}
           </motion.p>
         </motion.div>
 
