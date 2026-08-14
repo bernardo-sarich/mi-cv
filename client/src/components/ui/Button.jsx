@@ -10,14 +10,21 @@ export default function Button({
   children,
   className = '',
   type = 'button',
+  href,
   ...rest
 }) {
+  const classes = `inline-flex cursor-pointer items-center justify-center rounded-md px-4 py-2 text-sm font-medium font-sans transition-colors ${VARIANT_CLASSES[variant]} ${className}`
+
+  if (href) {
+    return (
+      <a href={href} className={classes} {...rest}>
+        {children}
+      </a>
+    )
+  }
+
   return (
-    <button
-      type={type}
-      className={`inline-flex cursor-pointer items-center justify-center rounded-md px-4 py-2 text-sm font-medium font-sans transition-colors ${VARIANT_CLASSES[variant]} ${className}`}
-      {...rest}
-    >
+    <button type={type} className={classes} {...rest}>
       {children}
     </button>
   )

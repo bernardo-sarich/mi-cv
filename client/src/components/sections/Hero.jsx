@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { useTypingEffect } from '../../hooks/useTypingEffect.js'
 import { useCounterAnimation } from '../../hooks/useCounterAnimation.js'
 import { useScrollReveal } from '../../hooks/useScrollReveal.js'
-import { useCVData } from '../../context/AppContext.jsx'
+import { useCVData, useLang } from '../../context/AppContext.jsx'
 import Badge from '../ui/Badge.jsx'
 import Button from '../ui/Button.jsx'
 import Card from '../ui/Card.jsx'
@@ -44,6 +44,7 @@ export default function Hero() {
     threshold: 0.3,
   })
   const { data } = useCVData()
+  const { lang } = useLang()
   const reduced = useReducedMotion()
   const containerVariants = getContainerVariants(reduced)
   const blockVariants = getBlockVariants(reduced)
@@ -53,6 +54,8 @@ export default function Hero() {
       .getElementById('projects')
       ?.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth' })
   }
+
+  const cvFileName = lang === 'es' ? 'Bernardo_Sarich_CV_ES.pdf' : 'Bernardo_Sarich_CV_EN.pdf'
 
   if (!data) return null
 
@@ -112,7 +115,12 @@ export default function Hero() {
             </div>
 
             <div className="flex min-w-[11rem] flex-1 flex-col gap-3">
-              <Button variant="primary" className="w-full flex-1">
+              <Button
+                variant="primary"
+                className="w-full flex-1"
+                href={`/cv/${cvFileName}`}
+                download={cvFileName}
+              >
                 {t('hero.downloadCv')}
               </Button>
               <Button variant="secondary" className="w-full flex-1" onClick={scrollToProjects}>
