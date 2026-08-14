@@ -11,6 +11,7 @@ import MatrixRain from './components/ui/MatrixRain.jsx'
 import LoadingScreen from './components/ui/LoadingScreen.jsx'
 
 const FIRST_VISIT_STORAGE_KEY = 'mi-cv:visited'
+const LOADING_SCREEN_DELAY_MS = 250
 
 // Loading only matters on a device's first-ever visit: that's the one load
 // that can hit an Azure cold start / Function-and-DB wake-up plus a fully
@@ -29,10 +30,30 @@ function useIsFirstVisit() {
   return isFirstVisit
 }
 
+// Delays the loading placeholder instead of showing it the instant `loading`
+// flips true: if the CV request already resolves within the delay (DB/Function
+// already warm), the placeholder never mounts at all, avoiding a needless flash.
+function useDelayedLoading(loading, delayMs) {
+  const [delayElapsed, setDelayElapsed] = useState(false)
+
+  useEffect(() => {
+    if (!loading) {
+      setDelayElapsed(false)
+      return
+    }
+
+    const timer = setTimeout(() => setDelayElapsed(true), delayMs)
+    return () => clearTimeout(timer)
+  }, [loading, delayMs])
+
+  return loading && delayElapsed
+}
+
 function AppContent() {
   const { loading } = useCVData()
   const isFirstVisit = useIsFirstVisit()
-  const showLoading = isFirstVisit && loading
+  const delayedLoading = useDelayedLoading(loading, LOADING_SCREEN_DELAY_MS)
+  const showLoading = isFirstVisit && delayedLoading
 
   return (
     // The flex classes restore the layout role this element had as a direct

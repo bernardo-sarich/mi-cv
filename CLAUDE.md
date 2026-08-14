@@ -2,76 +2,90 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## Communication rules
+## Reglas de comunicación
 
-- **Write to the user in Spanish.** All prose — explanations, summaries, questions, task reports — goes in Spanish. Code, identifiers, commit messages, and the OpenSpec artifacts stay in the repo's own conventions (English for code, Spanish for user-visible site content).
-- **The user's background is not frontend.** In `client/` — React, Tailwind, the JS tooling ecosystem, web conventions — do not assume familiarity: name the tool or concept before leaning on it, and prefer plain language over jargon. On backend work (`api/`, .NET, Azure Functions) he is comfortable; keep it brief there and skip the explanations.
-- **Never ask the user to decide something without explaining the consequences of each option.** A question like "should I change this config?" is useless on its own — spell out what visibly changes, what breaks or doesn't, and which option you recommend and why. If the answer barely matters, don't ask: pick the sensible default and say what you picked.
+- **Escribir al usuario en español.** Todo lo prosa — explicaciones, resúmenes, preguntas, reportes de tareas — va en español. El código, los identificadores, los mensajes de commit y los artefactos de OpenSpec mantienen las convenciones del repo (inglés para código, español para contenido visible del sitio).
+- **El usuario no viene de frontend.** En `client/` — React, Tailwind, el ecosistema de tooling de JS, convenciones web — no asumir familiaridad: nombrar la herramienta o el concepto antes de apoyarse en él, y preferir lenguaje llano sobre jerga. En trabajo de backend (`api/`, .NET, Azure Functions) está cómodo, ahí se puede ser breve y saltear las explicaciones.
+- **Nunca pedirle al usuario que decida algo sin explicar las consecuencias de cada opción.** Una pregunta tipo "¿cambio esta config?" no sirve sola: hay que detallar qué cambia visiblemente, qué se rompe o no, y qué opción se recomienda y por qué. Si la respuesta no importa demasiado, no preguntar: elegir el default sensato y decir qué se eligió.
 
-## Tooling rules
+## Reglas de tooling
 
-- **Do not call Playwright / browser tools unless the user explicitly asks for it.** Verifying a change visually is not a reason to open a browser on your own — describe the change and let the user look.
+- **No llamar a Playwright / herramientas de browser salvo que el usuario lo pida explícitamente.** Verificar un cambio visualmente no es motivo para abrir un browser por cuenta propia — describir el cambio y dejar que el usuario lo mire.
 
-## Repo shape
+## Qué es este repo
 
-Azure Static Web Apps project with two independent builds, wired together by `swa-cli.config.json`:
+Proyecto de Azure Static Web Apps con dos builds independientes, conectadas por `swa-cli.config.json`:
 
-- `client/` — Vite 8 + React 19 SPA (JSX only, no TypeScript). This is where nearly all work happens.
-- `api/` — Azure Functions, .NET isolated worker on `net10.0`. Currently a single placeholder HTTP trigger (`ProfileFunction`) that returns a string; the `/api/cv` endpoint the client calls does not exist yet.
-- `openspec/` — spec-driven planning artifacts (see below).
+- `client/` — SPA con Vite 8 + React 19 (JSX puro, sin TypeScript).
+- `api/` — Azure Functions, .NET isolated worker (net9.0), con arquitectura en capas (Clean/Hexagonal).
+- `openspec/` — artefactos de planificación spec-driven (specs vigentes en `openspec/specs/`, cambios propuestos/archivados en `openspec/changes/`).
 
-## Backend architecture
+No hay test runner configurado en ninguno de los dos proyectos — "correr los tests" no tiene destino.
 
-- **Capas**: `Api` (Functions, delgado) → `Application` (casos de uso) → `Domain` (entidades de negocio + puertos) → `Infrastructure` (EF Core, implementa los puertos). Nomenclatura estándar de Clean/Hexagonal Architecture — equivalente a lo que en tu monolito anterior eran `Agent - Service - Logic - Adapter`.
-- **Base de datos**: Azure SQL Database, *free offer* (serverless, gratis persistente), EF Core vía `Microsoft.EntityFrameworkCore.SqlServer`.
-- **Modelo de datos**: relacional (no JSON-blob) — entidades separadas por tipo (`Profile`, `Experience`, `Project`, `SkillCategory`, `Stat`, `ContactMessage`), cada una en Domain con su propia tabla vía EF migrations.
-- **Alcance**: incluye endpoint de lectura del CV (`GET /api/cv`) y formulario de contacto con escritura (`POST /api/contact`).
-- **Tests**: unitarios (Domain/Application con los puertos mockeados) e integración (Infrastructure contra una DB real/en contenedor, y Api de punta a punta).
-- **Audiencia del repo**: tanto scan rápido (recruiters) como revisión técnica profunda — por eso el plan incluye README/ADRs (para el scan) y tests + manejo de errores + CI (para la revisión profunda).
-
-## Commands
+## Comandos
 
 ```bash
-# client (run from client/)
-npm run dev            # Vite dev server; swa-cli expects it on 5173
-npm run build          # production build to client/dist
-npm run lint           # oxlint
-npm run format         # prettier --write .  (format:check for CI-style check)
+# client (desde client/)
+npm run dev            # servidor de Vite; swa-cli lo espera en :5173
+npm run build           # build de producción a client/dist
+npm run lint             # oxlint
+npm run format           # prettier --write .
+npm run format:check     # prettier --check . (para CI)
+npm run preview          # sirve el build de producción localmente
 
-# api (run from api/)
+# api (desde api/)
 dotnet build
 dotnet publish -c Release
+dotnet run --project Api                                              # corre solo la Function App
+dotnet ef database update --project Infrastructure --startup-project Infrastructure   # aplica migraciones
+dotnet run --project Seed                                             # puebla la DB desde client/src/data/cv-data.json
 
-# full stack, from repo root (requires the SWA CLI)
+# full stack, desde la raíz del repo (requiere la SWA CLI)
 swa start mi-cv
 ```
 
-There is no test suite in either project — no test runner is configured, so "run the tests" has no target. `npm run lint` + `npm run build` is the available verification.
+Setup local de la Api (ver `api/README.md` para el detalle completo): copiar `Api/local.settings.json.example` a `Api/local.settings.json`, completar `ConnectionStrings:CvDatabase` con una base propia, aplicar migraciones y correr el seed. `local.settings.json` está en `.gitignore` y nunca debe llevar secretos reales el `.example`.
 
-## Client architecture
+## Arquitectura del backend (`api/`)
 
-**Composition.** `App.jsx` renders every section in a fixed order inside `AppProvider`. Section DOM ids (`sobre-mi`, `experience`, `stack`, `projects`, `contacto`) are a contract with `Nav.jsx`'s `SECTIONS` list and with `openspec/specs/site-layout` — renaming one means updating both.
+Cinco proyectos en Clean/Hexagonal Architecture:
 
-**Theme and language** live in `context/AppContext.jsx` and are exposed only through `useTheme()` / `useLang()`. Theme toggles the `dark` class on `<html>`; language calls `i18n.changeLanguage`. Both default to dark/es and are not persisted.
+- **`Api`** — Azure Functions, delgado. `CvFunction.cs` expone `GET /api/cv`, `ContactFunction.cs` expone `POST /api/contact` (con CORS y honeypot). Ambas funciones delegan a un caso de uso y traducen sus excepciones (`ValidationException`, `RateLimitExceededException`) a `ProblemDetailsResult`.
+- **`Application`** — casos de uso (`GetCvUseCase`, `SubmitContactUseCase`) que orquestan los puertos, más las opciones (`RateLimitOptions`, `EmailNotificationOptions`) y los puertos (`Ports/`) que Infrastructure implementa.
+- **`Domain`** — entidades de negocio (`Profile`, `Experience`, `Project`, `SkillCategory`, `Stat`, `ContactMessage`, `ContactAttempt`, `CvContent`, `Language`), sin dependencias hacia afuera.
+- **`Infrastructure`** — implementa los puertos: `Persistence/` (EF Core contra Azure SQL vía `CvDbContext`, un repositorio por entidad) y `Email/SmtpContactNotifier.cs` (notificación por SMTP/Gmail vía MailKit). Las migraciones EF viven en `Infrastructure/Migrations/`.
+- **`Seed`** — consola standalone que lee `client/src/data/cv-data.json` y puebla `Profile`/`Stat`/`Experience`/`Project`/`SkillCategory` por locale. Es destructivo por locale en cada corrida (borra e inserta de nuevo) — apuntarlo siempre a una base local/dev.
 
-**Colors are explicit token pairs, not Tailwind's palette.** `tailwind.config.js` defines flat tokens (`bg`, `surface`, `border`, `text`, `textDim`, `accent`, `accentDim`, `onAccent`, `navBg`) plus a `dark-` prefixed twin for each. Every themed element must spell out both: `bg-surface dark:bg-dark-surface`. Values are pinned in `openspec/specs/design-system/spec.md`.
+**Modelo de datos**: relacional, no JSON-blob — una tabla por tipo de entidad, cada una migrada con EF Core.
 
-**Tailwind v4 config is split**: `src/styles/tailwind.css` does `@import 'tailwindcss'` + `@config '../../tailwind.config.js'`, and also holds the `body` base styles and the keyframes/`animate-*` classes.
+**Contacto**: `POST /api/contact` valida (`name`/`email`/`message`), aplica un rate limit por IP (`ContactAttemptStore`/`ContactAttemptEntity`, ventana configurable vía `ContactRateLimit:*`) y descarta en silencio los envíos con honeypot no vacío. Tras persistir el mensaje, intenta mandar un email de notificación al dueño del sitio (best-effort: si falla, solo se loguea, la respuesta sigue siendo `201`). La contraseña de aplicación de Gmail (`EmailNotification:AppPassword`) es el único secreto real del proyecto — nunca va en `local.settings.json.example`, se inyecta como variable de entorno (`EmailNotification__AppPassword` en el Function App desplegado).
 
-**Cascade-layer gotcha in `src/index.css`.** That file is leftover Vite-template CSS, imported *before* tailwind.css in `main.jsx`, and it is unlayered — Tailwind v4 emits everything inside `@layer`, and unlayered rules win over every layer regardless of specificity or order. A bare element selector there (there used to be an `h2` rule) silently overrides utility classes on that element. Do not add element selectors to it; prefer utility classes or a component in `components/ui/`. Its `:root` variables (`--accent: #aa3bff`, etc.) are dead template palette, unrelated to the site's green accent — never read theme colors from them.
+La connection string (`ConnectionStrings:CvDatabase`) sigue la misma convención: nunca en el repo, se inyecta vía configuración/variables de entorno (`ConnectionStrings__CvDatabase` en el Function App desplegado).
 
-**Data is still hardcoded.** `lib/api.js` fetches `${VITE_API_BASE_URL || '/api'}/cv` and silently falls back to `data/mock/cv-data.json`, and `hooks/useCVData.js` wraps it — but no section uses either yet. Each section owns its content as a module-level constant (`JOBS`, `CATEGORIES`, `PROJECTS`); `Nav` and `Footer` import the mock JSON directly for the owner's first name. Content edits go in the section components today.
+## Arquitectura del cliente (`client/`)
 
-**i18n is partial.** `locales/{es,en}.json` back `useTranslation()`; `Nav` and the section titles use `t()`, while section bodies are hardcoded Spanish. Adding a translated string means touching both locale files.
+**Composición.** `App.jsx` renderiza las secciones en orden fijo dentro de `AppProvider`. Los ids de sección (`sobre-mi`, `experience`, `stack`, `projects`, `contacto`) son un contrato con `Nav.jsx` (lista `SECTIONS`) y con `openspec/specs/site-layout` — cambiar uno implica actualizar los otros dos.
 
-**Reusable UI** lives in `components/ui/` (`Button`, `Badge`, `Card`, `SectionLabel`, `SectionTitle`, toggles). They take `className` and spread `...rest`, and hold no business logic — extend a component there rather than re-styling one-off elements. Sections pair `SectionLabel` (the mono `<section id="...">` tag) with `SectionTitle` (the visible heading).
+**Datos del CV.** `context/AppContext.jsx` expone `useCVData()`, que dispara `lib/api.js#getCVData(lang)` cada vez que cambia el idioma. Esa función pega a `${VITE_API_BASE_URL || '/api'}/cv?lang=...` y, si falla (red caída, API abajo), cae en silencio al JSON local `data/cv-data.json` como mock. Todas las secciones (`Hero`, `Experience`, `Skills`, `Projects`) leen del hook, no de constantes hardcodeadas — el único contenido que sigue fijo en el cliente son los links de contacto (`data/contact-info.js`), que no tienen tabla en la DB.
 
-**Animation** is framer-motion plus two IntersectionObserver hooks: `useScrollReveal` (fires once, then disconnects — its first `key` argument is a debugging label only) and `useScrollProgress` (drives the Experience timeline rail height).
+**Loading de primera visita.** `App.jsx` solo muestra `LoadingScreen` (estética terminal) cuando `useCVData().loading` es `true` **y** es la primera vez que ese navegador visita el sitio (flag en `localStorage`, ver `cv-loading-indicator` spec) — cubre el cold start de Azure + la descarga de assets sin cachear que solo ocurre en esa primera carga por dispositivo; en visitas repetidas no se muestra.
 
-**`MatrixRain`** paints two canvases in the viewport gutters flanking the centered app column, and only above 1280px with reduced-motion off. It duplicates two values by design — the `#root` width from `index.css` and the accent hex from `tailwind.config.js` — with comments saying so; change them together.
+**Theme y language** viven en `context/AppContext.jsx`, expuestos solo vía `useTheme()` / `useLang()`. El theme alterna la clase `dark` en `<html>`; el language llama a `i18n.changeLanguage`. Ambos arrancan en dark/es y no persisten entre sesiones.
 
-## OpenSpec workflow
+**Colores como tokens explícitos, no la paleta de Tailwind.** `tailwind.config.js` define tokens planos (`bg`, `surface`, `border`, `text`, `textDim`, `accent`, `accentDim`, `onAccent`, `navBg`) más su gemelo con prefijo `dark-`. Todo elemento themeado debe declarar ambos: `bg-surface dark:bg-dark-surface`. Los valores están fijados en `openspec/specs/design-system/spec.md`.
 
-`openspec/specs/<capability>/spec.md` holds the living requirements; proposed work goes to `openspec/changes/<name>/` (proposal, design, specs delta, tasks) and lands in `openspec/changes/archive/` once applied. Use the `/opsx:*` skills for that flow — propose is planning-only and must not touch project code in the same turn. The generated `.claude/skills/openspec-*` and `.claude/commands/opsx/` directories are gitignored, as is `.playwright-mcp/`.
+**Tailwind v4 con config partida**: `src/styles/tailwind.css` hace `@import 'tailwindcss'` + `@config '../../tailwind.config.js'`, y también contiene los estilos base de `body` y los keyframes/clases `animate-*`.
 
-When a change alters behavior the specs describe (section structure, tokens, nav anchors, theme/i18n state), update the matching spec under `openspec/specs/` rather than leaving it stale.
+**Trampa de cascade layers en `src/index.css`.** Es CSS remanente del template de Vite, importado *antes* de `tailwind.css` en `main.jsx`, y no está en ningún `@layer` — Tailwind v4 emite todo dentro de `@layer`, y las reglas sin layer le ganan a cualquier layer sin importar especificidad ni orden. No agregar selectores de elemento ahí; preferir clases utility o un componente en `components/ui/`. Sus variables `:root` (`--accent: #aa3bff`, etc.) son paleta muerta del template, no relacionada con el verde del sitio — nunca leer colores de tema desde ahí.
+
+**`MatrixRain`** pinta dos canvases en los márgenes del viewport a los costados de la columna central, solo por encima de 1280px y con reduced-motion apagado. Duplica a propósito dos valores — el ancho de `#root` de `index.css` y el hex del accent de `tailwind.config.js` — con comentarios que lo explican; cambiarlos juntos.
+
+**Animación** es framer-motion más dos hooks de IntersectionObserver: `useScrollReveal` (dispara una vez y se desconecta) y `useScrollProgress` (mueve el riel de la timeline de Experience).
+
+**i18n** vía `locales/{es,en}.json` + `useTranslation()`. La UI de navegación y los títulos de sección usan `t()`.
+
+**UI reutilizable** en `components/ui/` (`Button`, `Badge`, `Card`, `SectionLabel`, `SectionTitle`, toggles, `LoadingScreen`). Reciben `className` y spread de `...rest`, sin lógica de negocio.
+
+## Flujo de OpenSpec
+
+`openspec/specs/<capability>/spec.md` tiene los requirements vigentes; el trabajo propuesto va a `openspec/changes/<name>/` (proposal, design, specs delta, tasks) y pasa a `openspec/changes/archive/` una vez aplicado. Usar las skills `/opsx:*` para ese flujo — `propose` es solo planificación y no debe tocar código del proyecto en el mismo turno. Cuando un cambio altera comportamiento que las specs describen, actualizar la spec correspondiente bajo `openspec/specs/` en vez de dejarla desactualizada.
