@@ -96,19 +96,23 @@ On pointer hover, a contact link block SHALL emphasize itself by highlighting it
 - **THEN** the border and glow return smoothly to their resting appearance
 
 ### Requirement: Placeholder contact targets
-Contact link targets SHALL come from a dedicated, client-side contact info source keyed by language, requiring no CV data hook, API call, or other network fetch, so the section renders fully offline and immediately.
+Contact link targets SHALL come from a dedicated, client-side contact info source keyed by language, requiring no network fetch of its own. The section's mount SHALL be synchronized with the CV content hook's loading state, so it does not appear ahead of the rest of the page's content and create a piecemeal loading impression.
 
-#### Scenario: Section renders without network calls
-- **WHEN** the Contact section is rendered
+#### Scenario: Contact entries are not fetched over the network
+- **WHEN** the Contact section renders its contact links
 - **THEN** all contact entries are sourced from the dedicated client-side contact info source and no request is made to fetch them
 
 #### Scenario: Contact targets update with the selected language
 - **WHEN** the visitor switches the site language while the Contact section is visible
 - **THEN** any language-specific contact content updates without a page reload, while the underlying addresses (GitHub, LinkedIn, email) remain the same across languages
 
-#### Scenario: Section renders independently of CV data availability
-- **WHEN** the CV content API is slow, unreachable, or returns an error
-- **THEN** the Contact section's form and contact links still render normally, since neither depends on CV content
+#### Scenario: Section waits for the rest of the page's content to finish loading
+- **WHEN** the CV content hook used elsewhere on the page is still loading
+- **THEN** the Contact section does not render yet
+
+#### Scenario: Section renders once loading finishes, even on API failure
+- **WHEN** the CV content hook's loading state resolves, whether from a successful API response or from its local fallback
+- **THEN** the Contact section's form and contact links render normally, since neither depends on the CV content's actual value
 
 ### Requirement: Localized section strings
 The section's user-facing text — heading, field labels, submit control, and confirmation message — SHALL be served from the site's translation resources in both supported languages, and SHALL update when the visitor switches language without a page reload.

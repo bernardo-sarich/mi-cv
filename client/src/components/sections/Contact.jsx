@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
-import { useLang } from '../../context/AppContext.jsx'
+import { useCVData, useLang } from '../../context/AppContext.jsx'
 import { CONTACT_INFO } from '../../data/contact-info.js'
 import SectionLabel from '../ui/SectionLabel.jsx'
 import SectionTitle from '../ui/SectionTitle.jsx'
@@ -133,6 +133,7 @@ function ContactLink({ link }) {
 export default function Contact() {
   const { t } = useTranslation()
   const { lang } = useLang()
+  const { loading } = useCVData()
   const [form, setForm] = useState(EMPTY_FORM)
   const [errors, setErrors] = useState(EMPTY_ERRORS)
   const [sent, setSent] = useState(false)
@@ -185,6 +186,8 @@ export default function Contact() {
     setSent(true)
     sentTimerRef.current = setTimeout(() => setSent(false), 4000)
   }
+
+  if (loading) return null
 
   const contactLinks = buildContactLinks(CONTACT_INFO[lang])
 
