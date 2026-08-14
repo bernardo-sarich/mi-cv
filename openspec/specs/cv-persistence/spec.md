@@ -7,11 +7,11 @@ Provides the EF Core-backed implementation of the `ICvRepository` and `IContactR
 ## Requirements
 
 ### Requirement: CvDbContext exposes a table per persistable entity
-The system SHALL provide a `DbContext` with one `DbSet` for each persistable Domain entity: `Profile`, `Experience`, `Project`, `SkillCategory`, `Stat`, and `ContactMessage`.
+The system SHALL provide a `DbContext` with one `DbSet` for each persistable Domain entity: `Profile`, `Experience`, `Project`, `SkillCategory`, `Stat`, `ContactMessage`, and `ContactAttempt`.
 
 #### Scenario: Each persistable entity has its own set
 - **WHEN** the `DbContext` is inspected
-- **THEN** it exposes a distinct `DbSet` for `Profile`, `Experience`, `Project`, `SkillCategory`, `Stat`, and `ContactMessage`, and no `DbSet` for `CvContent` (a read-time aggregate, not a stored entity)
+- **THEN** it exposes a distinct `DbSet` for `Profile`, `Experience`, `Project`, `SkillCategory`, `Stat`, `ContactMessage`, and `ContactAttempt`, and no `DbSet` for `CvContent` (a read-time aggregate, not a stored entity)
 
 ### Requirement: Entity mapping uses Fluent API only
 All entity-to-table mapping SHALL be configured through Fluent API (`OnModelCreating`). Domain entity classes SHALL NOT carry persistence-specific data annotations.
@@ -56,13 +56,13 @@ The system SHALL configure the `DbContext` to automatically retry database opera
 - **WHEN** a database operation fails with an error that is not classified as transient, or all retry attempts have been exhausted
 - **THEN** the failure is surfaced to the caller instead of being retried indefinitely
 
-### Requirement: Initial migration is generated but not applied
-The system SHALL include a generated EF Core migration that creates the initial schema for all mapped entities. This change SHALL NOT apply that migration to any database.
+### Requirement: Migrations are generated and applied manually, not by the deployment pipeline
+The system SHALL include generated EF Core migrations that create and evolve the schema for all mapped entities, including `ContactAttempt`. Applying a migration to a database SHALL be a manual, documented step (`dotnet ef database update`), never an automatic part of the CI/CD deployment workflow.
 
-#### Scenario: Migration exists and creates all mapped tables
-- **WHEN** the initial migration's `Up` method is inspected
-- **THEN** it creates a table for each of `Profile`, `Experience`, `Project`, `SkillCategory`, `Stat`, and `ContactMessage`
+#### Scenario: Migrations create all mapped tables
+- **WHEN** the migrations are inspected
+- **THEN** together they create a table for each of `Profile`, `Experience`, `Project`, `SkillCategory`, `Stat`, `ContactMessage`, and `ContactAttempt`
 
-#### Scenario: No database is touched by this change
-- **WHEN** this change is applied
-- **THEN** no `dotnet ef database update` or equivalent migration-apply step runs against any database
+#### Scenario: Deployment does not apply migrations automatically
+- **WHEN** the CI/CD workflow builds and deploys the Api
+- **THEN** no `dotnet ef database update` or equivalent migration-apply step runs as part of that pipeline; applying migrations to a database is a manual step documented in `api/README.md`
