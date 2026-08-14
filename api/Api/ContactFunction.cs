@@ -63,9 +63,15 @@ public class ContactFunction(
 
     private static string GetClientIpAddress(HttpRequest req)
     {
+        // Azure's edge appends the real client IP as the last hop of X-Forwarded-For;
+        // any earlier hops (including the first) can be forged by the caller, so trusting
+        // them would let an attacker set an arbitrary IP and bypass the rate limit.
         if (req.Headers.TryGetValue("X-Forwarded-For", out var forwardedFor) &&
             !string.IsNullOrWhiteSpace(forwardedFor))
-            return forwardedFor.ToString().Split(',')[0].Trim();
+        {
+            var hops = forwardedFor.ToString().Split(',');
+            return hops[^1].Trim();
+        }
 
         return req.HttpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown";
     }
