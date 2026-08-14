@@ -10,7 +10,7 @@ import Contact from './components/sections/Contact.jsx'
 import MatrixRain from './components/ui/MatrixRain.jsx'
 import LoadingScreen from './components/ui/LoadingScreen.jsx'
 
-const LOADING_SCREEN_DELAY_MS = 250
+const LOADING_SCREEN_DELAY_MS = 600
 
 // Delays the loading placeholder instead of showing it the instant `loading`
 // flips true: if the CV request already resolves within the delay (DB/Function
