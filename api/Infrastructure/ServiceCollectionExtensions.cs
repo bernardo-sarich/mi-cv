@@ -11,7 +11,9 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddDbContext<CvDbContext>(options =>
-            options.UseSqlServer(configuration.GetConnectionString("CvDatabase")));
+            options.UseSqlServer(
+                configuration.GetConnectionString("CvDatabase"),
+                sql => sql.ExecutionStrategy(dependencies => new FastRetryExecutionStrategy(dependencies))));
 
         services.AddScoped<ICvRepository, EfCvRepository>();
         services.AddScoped<IContactRepository, EfContactRepository>();

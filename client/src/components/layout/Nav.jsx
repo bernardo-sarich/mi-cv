@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useCVData } from '../../hooks/useCVData.js'
+import { useCVData } from '../../context/AppContext.jsx'
 import LangToggle from '../ui/LangToggle.jsx'
 import ThemeToggle from '../ui/ThemeToggle.jsx'
 

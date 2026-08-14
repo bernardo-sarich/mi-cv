@@ -1,7 +1,7 @@
 import { motion, useReducedMotion } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
 import { useScrollReveal } from '../../hooks/useScrollReveal.js'
-import { useCVData } from '../../hooks/useCVData.js'
+import { useCVData } from '../../context/AppContext.jsx'
 import SectionLabel from '../ui/SectionLabel.jsx'
 import SectionTitle from '../ui/SectionTitle.jsx'
 import Card from '../ui/Card.jsx'

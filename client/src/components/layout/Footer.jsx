@@ -1,4 +1,4 @@
-import { useCVData } from '../../hooks/useCVData.js'
+import { useCVData } from '../../context/AppContext.jsx'
 
 export default function Footer() {
   const { data } = useCVData()
