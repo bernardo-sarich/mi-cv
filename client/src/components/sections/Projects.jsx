@@ -119,7 +119,7 @@ export default function Projects() {
 
         <div
           ref={scrollerRef}
-          className="no-scrollbar mx-auto mt-8 flex max-w-[976px] gap-4 overflow-x-auto scroll-px-0 sm:scroll-px-5 snap-x snap-mandatory scroll-smooth px-0 py-3 sm:px-5"
+          className="no-scrollbar mx-auto mt-8 flex w-fit max-w-[976px] gap-4 overflow-x-auto scroll-px-0 sm:scroll-px-5 snap-x snap-mandatory scroll-smooth px-0 py-3 sm:px-5"
         >
           {data.projects.map((project, index) => (
             <ProjectCard key={`${project.name}-${index}`} project={project} />

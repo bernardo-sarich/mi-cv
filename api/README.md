@@ -49,3 +49,17 @@ The connection string is never stored in the repo. It's supplied per environment
 - `ContactRateLimit:MaxAttempts` / `ContactRateLimit:Window` (see `Application/RateLimitOptions.cs`)
 
 If `Program.cs` or these options classes grow new required settings, update `local.settings.json.example` to match.
+
+## Contact notification email
+
+When a visitor submits the contact form, after the message is persisted the Api attempts to send a notification email (see `Application/UseCases/SubmitContactUseCase.cs`, `Infrastructure/Email/SmtpContactNotifier.cs`). This is best-effort: if it fails, the failure is only logged — the visitor still gets `201 Created` and the message is still saved.
+
+Sending is done over SMTP via Gmail, using the `MailKit` package. Configuration lives under the `EmailNotification` section:
+
+- `EmailNotification:SmtpHost` / `EmailNotification:SmtpPort` — default to `smtp.gmail.com` / `587`, no need to override for Gmail.
+- `EmailNotification:FromAddress` / `EmailNotification:ToAddress` / `EmailNotification:Username` — non-secret, see `local.settings.json.example`.
+- `EmailNotification:AppPassword` — **secret, never committed and not present in `local.settings.json.example`.** Generate it from the sending Gmail account's security settings (requires 2-Step Verification enabled: Google Account → Security → 2-Step Verification → App passwords), then set it:
+  - **Local**: add it to your own gitignored `Api/local.settings.json` under `EmailNotification:AppPassword`.
+  - **Deployed Function App**: set it as an application setting named `EmailNotification__AppPassword`, the same `__`-for-`:` convention used for `ConnectionStrings__CvDatabase`.
+
+If `AppPassword`, `FromAddress`, or `ToAddress` is missing, the notifier logs a warning and skips sending instead of throwing — a fresh local setup that only cares about the database works without it.

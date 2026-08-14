@@ -25,5 +25,6 @@ builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddOptions<CorsOptions>().Bind(builder.Configuration.GetSection(CorsOptions.SectionName));
 builder.Services.AddSingleton<CorsHeaderWriter>();
 builder.Services.AddOptions<RateLimitOptions>().Bind(builder.Configuration.GetSection(RateLimitOptions.SectionName));
+builder.Services.AddOptions<EmailNotificationOptions>().Bind(builder.Configuration.GetSection(EmailNotificationOptions.SectionName));
 
 builder.Build().Run();

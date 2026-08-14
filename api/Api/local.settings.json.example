@@ -6,5 +6,12 @@
   },
   "ConnectionStrings": {
     "CvDatabase": "Server=localhost;Database=CvDatabase;Trusted_Connection=True;TrustServerCertificate=True;"
+  },
+  "EmailNotification": {
+    "SmtpHost": "smtp.gmail.com",
+    "SmtpPort": "587",
+    "FromAddress": "bernardo.sarich@gmail.com",
+    "ToAddress": "bernardo.sarich@gmail.com",
+    "Username": "bernardo.sarich@gmail.com"
   }
 }

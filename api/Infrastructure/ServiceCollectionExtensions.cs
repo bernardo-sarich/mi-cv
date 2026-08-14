@@ -1,4 +1,5 @@
 using Application.Ports;
+using Infrastructure.Email;
 using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -18,6 +19,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<ICvRepository, EfCvRepository>();
         services.AddScoped<IContactRepository, EfContactRepository>();
         services.AddScoped<IContactAttemptStore, EfContactAttemptStore>();
+        services.AddScoped<IContactNotifier, SmtpContactNotifier>();
 
         return services;
     }

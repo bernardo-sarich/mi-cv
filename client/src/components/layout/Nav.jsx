@@ -43,6 +43,9 @@ export default function Nav() {
             <LangToggle />
             <ThemeToggle />
           </div>
+          <div className="md:hidden">
+            <LangToggle />
+          </div>
           <button
             type="button"
             onClick={() => setMenuOpen((open) => !open)}
@@ -93,7 +96,6 @@ export default function Nav() {
             ))}
           </nav>
           <div className="flex items-center gap-2">
-            <LangToggle />
             <ThemeToggle />
           </div>
         </div>

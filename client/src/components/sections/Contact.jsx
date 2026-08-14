@@ -76,6 +76,12 @@ const EMPTY_ERRORS = { name: '', email: '', message: '' }
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
+const FIELD_ERROR_KEYS = {
+  name: 'contact.errorRequired',
+  email: 'contact.errorEmail',
+  message: 'contact.errorRequired',
+}
+
 const FIELD_CLASSES =
   'w-full rounded-md border border-border dark:border-dark-border bg-surface dark:bg-dark-surface px-3 py-2 text-sm text-text dark:text-dark-text outline-none transition-colors focus:border-accent dark:focus:border-dark-accent'
 
@@ -137,6 +143,8 @@ export default function Contact() {
   const [form, setForm] = useState(EMPTY_FORM)
   const [errors, setErrors] = useState(EMPTY_ERRORS)
   const [sent, setSent] = useState(false)
+  const [status, setStatus] = useState('idle')
+  const [generalError, setGeneralError] = useState('')
   const sentTimerRef = useRef(null)
   const reduced = useReducedMotion()
 
@@ -161,7 +169,7 @@ export default function Contact() {
     setErrors((current) => ({ ...current, [name]: validateField(name, value) }))
   }
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault()
 
     const nextErrors = {
@@ -172,19 +180,42 @@ export default function Contact() {
     setErrors(nextErrors)
     if (Object.values(nextErrors).some(Boolean)) return
 
-    // TODO(api): replace the demo feedback below with the real call once the
-    // /api/contact Azure Function exists:
-    //   await fetch('/api/contact', {
-    //     method: 'POST',
-    //     headers: { 'Content-Type': 'application/json' },
-    //     body: JSON.stringify(form),
-    //   })
+    setGeneralError('')
+    setStatus('sending')
 
-    setForm(EMPTY_FORM)
-    setErrors(EMPTY_ERRORS)
-    clearTimeout(sentTimerRef.current)
-    setSent(true)
-    sentTimerRef.current = setTimeout(() => setSent(false), 4000)
+    try {
+      const base = import.meta.env.VITE_API_BASE_URL || '/api'
+      const response = await fetch(`${base}/contact`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form),
+      })
+
+      if (response.status === 201) {
+        setForm(EMPTY_FORM)
+        setErrors(EMPTY_ERRORS)
+        clearTimeout(sentTimerRef.current)
+        setSent(true)
+        sentTimerRef.current = setTimeout(() => setSent(false), 4000)
+      } else if (response.status === 400) {
+        const problem = await response.json()
+        const fieldErrors = { ...EMPTY_ERRORS }
+        for (const field of Object.keys(FIELD_ERROR_KEYS)) {
+          if (problem.errors?.[field]?.length) {
+            fieldErrors[field] = t(FIELD_ERROR_KEYS[field])
+          }
+        }
+        setErrors(fieldErrors)
+      } else if (response.status === 429) {
+        setGeneralError(t('contact.errorRateLimit'))
+      } else {
+        setGeneralError(t('contact.errorGeneric'))
+      }
+    } catch {
+      setGeneralError(t('contact.errorGeneric'))
+    } finally {
+      setStatus('idle')
+    }
   }
 
   if (loading) return null
@@ -260,8 +291,12 @@ export default function Contact() {
             </div>
 
             <div>
-              <Button type="submit">{t('contact.formSubmit')}</Button>
+              <Button type="submit" disabled={status === 'sending'}>
+                {status === 'sending' ? t('contact.formSending') : t('contact.formSubmit')}
+              </Button>
             </div>
+
+            <FieldError message={generalError} reduced={reduced} />
 
             <AnimatePresence>
               {sent && (

@@ -34,9 +34,12 @@
     "formEmail": "Correo electrónico",
     "formMessage": "Mensaje",
     "formSubmit": "Enviar",
-    "formSent": "// mensaje enviado (demo)",
+    "formSent": "// mensaje enviado",
+    "formSending": "Enviando…",
     "linksTitle": "Links",
     "errorRequired": "Este campo es obligatorio",
-    "errorEmail": "Ingresá un correo electrónico válido"
+    "errorEmail": "Ingresá un correo electrónico válido",
+    "errorRateLimit": "Demasiados intentos. Probá de nuevo en unos minutos.",
+    "errorGeneric": "No se pudo enviar el mensaje. Probá de nuevo."
   }
 }

@@ -34,9 +34,12 @@
     "formEmail": "Email",
     "formMessage": "Message",
     "formSubmit": "Send",
-    "formSent": "// message sent (demo)",
+    "formSent": "// message sent",
+    "formSending": "Sending…",
     "linksTitle": "Links",
     "errorRequired": "This field is required",
-    "errorEmail": "Enter a valid email address"
+    "errorEmail": "Enter a valid email address",
+    "errorRateLimit": "Too many attempts. Please try again in a few minutes.",
+    "errorGeneric": "Couldn't send the message. Please try again."
   }
 }

@@ -2,6 +2,7 @@ using System.Text.RegularExpressions;
 using Application.Errors;
 using Application.Ports;
 using Domain;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 namespace Application.UseCases;
@@ -11,7 +12,9 @@ public record SubmitContactRequest(string? Name, string? Email, string? Message,
 public partial class SubmitContactUseCase(
     IContactRepository contactRepository,
     IContactAttemptStore contactAttemptStore,
-    IOptions<RateLimitOptions> rateLimitOptions)
+    IContactNotifier contactNotifier,
+    IOptions<RateLimitOptions> rateLimitOptions,
+    ILogger<SubmitContactUseCase> logger)
 {
     private const int NameMaxLength = 200;
     private const int EmailMaxLength = 320;
@@ -67,6 +70,15 @@ public partial class SubmitContactUseCase(
 
         await contactRepository.SaveAsync(message, cancellationToken);
         await contactAttemptStore.RecordAsync(ipAddress, now, cancellationToken);
+
+        try
+        {
+            await contactNotifier.NotifyAsync(message, cancellationToken);
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Failed to send contact notification email.");
+        }
     }
 
     [GeneratedRegex(@"^[^@\s]+@[^@\s]+\.[^@\s]+$")]
