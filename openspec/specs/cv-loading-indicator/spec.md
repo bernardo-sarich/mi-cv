@@ -2,36 +2,28 @@
 
 ## Purpose
 
-Gives the visitor visual feedback, styled to match the site's terminal aesthetic, for the window between first paint and CV content becoming available on a device's first-ever visit — the one load that can be slow due to an Azure cold start and a fully uncached asset download — instead of a blank gap between the nav and the footer. Repeat visits, where the load is already fast, skip the placeholder entirely to avoid an unnecessary flash. A short delay before showing the placeholder likewise avoids a flash when the first-visit load happens to resolve quickly (e.g. the Function/database were already warm).
+Gives the visitor visual feedback, styled to match the site's terminal aesthetic, for the window between first paint and CV content becoming available — covering an Azure Function/DB cold start on any visit — instead of a blank gap between the nav and the footer. A short delay before showing the placeholder avoids a flash when the load happens to resolve quickly (e.g. the Function/database were already warm).
 
 ## Requirements
 
-### Requirement: Loading placeholder shown only on a device's first visit while CV content is unavailable past a short delay
-The system SHALL track, per browser, whether the site has been visited before (persisted client-side, e.g. via `localStorage`). On a visit where no prior-visit record exists, the system SHALL render a loading placeholder in place of the Hero/Experience/Skills/Projects/Contact section stack once the CV content hook's `loading` value has been `true` continuously for a short fixed delay (250ms), and SHALL render the real sections once `loading` becomes `false`. If `loading` becomes `false` before that delay elapses, the placeholder SHALL NOT be rendered at all. On any visit where a prior-visit record exists, the system SHALL NOT render the loading placeholder regardless of the `loading` value, and SHALL render the real sections directly (which may render nothing until content resolves, as before this capability existed).
+### Requirement: Loading placeholder shown while CV content is unavailable past a short delay
+The system SHALL render a loading placeholder in place of the Hero/Experience/Skills/Projects/Contact section stack once the CV content hook's `loading` value has been `true` continuously for a short fixed delay (250ms), and SHALL render the real sections once `loading` becomes `false`. If `loading` becomes `false` before that delay elapses, the placeholder SHALL NOT be rendered at all. This applies on every visit, not just a device's first — there is no persisted first-visit tracking.
 
-#### Scenario: Placeholder shows during a first-ever visit
-- **WHEN** the page first mounts on a browser with no prior-visit record and the CV content hook's `loading` is `true` for at least the fixed delay
+#### Scenario: Placeholder shows once the delay elapses
+- **WHEN** the page mounts and the CV content hook's `loading` is `true` for at least the fixed delay
 - **THEN** the loading placeholder is rendered in place of the section stack, and none of the Hero/Experience/Skills/Projects/Contact sections are rendered
 
 #### Scenario: Placeholder is skipped when content resolves within the delay
-- **WHEN** the page first mounts on a browser with no prior-visit record and the CV content hook's `loading` transitions to `false` before the fixed delay elapses (e.g. the Function/database were already warm)
+- **WHEN** the page mounts and the CV content hook's `loading` transitions to `false` before the fixed delay elapses (e.g. the Function/database were already warm)
 - **THEN** the loading placeholder is never rendered, and the section stack renders directly
 
 #### Scenario: Placeholder is replaced once content is available
 - **WHEN** the CV content hook's `loading` transitions to `false` while the placeholder is showing
 - **THEN** the loading placeholder is no longer rendered and the section stack renders in its place
 
-#### Scenario: Placeholder reappears on a language switch during the same first visit
-- **WHEN** the visitor switches the site language during their first-ever visit, re-triggering a CV content fetch with `loading` set back to `true`
-- **THEN** the loading placeholder is shown again until the newly requested language's content resolves
-
-#### Scenario: A prior-visit record is written on visit
-- **WHEN** the page mounts, regardless of whether a prior-visit record already existed
-- **THEN** the system writes a prior-visit record for this browser, so any subsequent visit is treated as a repeat visit
-
-#### Scenario: Placeholder does not show on a repeat visit
-- **WHEN** the page mounts on a browser with a prior-visit record and the CV content hook's `loading` is `true`
-- **THEN** the loading placeholder is not rendered, and the section stack renders directly instead
+#### Scenario: Placeholder reappears on a language switch
+- **WHEN** the visitor switches the site language, re-triggering a CV content fetch with `loading` set back to `true`
+- **THEN** the loading placeholder is shown again (after the delay) until the newly requested language's content resolves
 
 ### Requirement: Nav, footer, and background are unaffected by the loading state
 The persistent site shell (navigation bar, footer, and the Matrix rain background) SHALL remain mounted and unaffected while the loading placeholder is shown.

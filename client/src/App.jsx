@@ -10,25 +10,7 @@ import Contact from './components/sections/Contact.jsx'
 import MatrixRain from './components/ui/MatrixRain.jsx'
 import LoadingScreen from './components/ui/LoadingScreen.jsx'
 
-const FIRST_VISIT_STORAGE_KEY = 'mi-cv:visited'
 const LOADING_SCREEN_DELAY_MS = 250
-
-// Loading only matters on a device's first-ever visit: that's the one load
-// that can hit an Azure cold start / Function-and-DB wake-up plus a fully
-// uncached asset download. Repeat visits are already fast, so skipping the
-// placeholder there avoids an unnecessary flash.
-function useIsFirstVisit() {
-  const [isFirstVisit] = useState(() => {
-    if (typeof window === 'undefined') return false
-    return !window.localStorage.getItem(FIRST_VISIT_STORAGE_KEY)
-  })
-
-  useEffect(() => {
-    window.localStorage.setItem(FIRST_VISIT_STORAGE_KEY, '1')
-  }, [])
-
-  return isFirstVisit
-}
 
 // Delays the loading placeholder instead of showing it the instant `loading`
 // flips true: if the CV request already resolves within the delay (DB/Function
@@ -51,9 +33,7 @@ function useDelayedLoading(loading, delayMs) {
 
 function AppContent() {
   const { loading } = useCVData()
-  const isFirstVisit = useIsFirstVisit()
-  const delayedLoading = useDelayedLoading(loading, LOADING_SCREEN_DELAY_MS)
-  const showLoading = isFirstVisit && delayedLoading
+  const showLoading = useDelayedLoading(loading, LOADING_SCREEN_DELAY_MS)
 
   return (
     // The flex classes restore the layout role this element had as a direct
