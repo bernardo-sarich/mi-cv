@@ -1,6 +1,7 @@
 {
   "loading": {
-    "cv": "conectando con la API..."
+    "cv": "conectando con la API...",
+    "hint": "La base de datos es serverless y puede tardar hasta un minuto en despertarse"
   },
   "nav": {
     "about": "Sobre mí",

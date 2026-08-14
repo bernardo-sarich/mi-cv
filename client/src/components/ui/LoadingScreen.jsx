@@ -18,6 +18,10 @@ export default function LoadingScreen() {
           {text}
           {!reduced && <span className="animate-blink inline-block w-2">▍</span>}
         </div>
+        <div className="mt-2 text-xs text-textDim dark:text-dark-textDim">
+          {'// '}
+          {t('loading.hint')}
+        </div>
       </div>
     </div>
   )

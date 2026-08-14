@@ -41,6 +41,10 @@ The connection string is never stored in the repo. It's supplied per environment
 - **Deployed Function App**: set it in the Function App's **Application settings** (Azure Portal → Function App → Configuration), as a setting named `ConnectionStrings__CvDatabase` (the `__` double-underscore is how App Settings encode the `:` section separator that `IConfiguration` expects). Mark it as a slot setting / use Key Vault references if the deployment has multiple slots or stricter secret handling.
 - **CI/CD**: no GitHub Actions workflow exists yet in this repo. When one is added, store the connection string as a **GitHub Actions secret** (repo or environment-scoped) and inject it into the deployment step's environment as `ConnectionStrings__CvDatabase` (or pass it to whatever step configures the Function App's application settings) — never write it into a workflow file or commit it.
 
+## Serverless cold start
+
+`Infrastructure/ServiceCollectionExtensions.cs` overrides `ConnectTimeout` to 30 seconds on whatever `ConnectionStrings:CvDatabase` is configured (local or deployed), instead of relying on `SqlClient`'s 15s default — Microsoft recommends 30s for Azure SQL serverless databases, since auto-resume from a paused state can take longer than 15s. This is applied in code so it doesn't need to be repeated in every environment's connection string. `EfCvRepository`/`EfContactRepository` calls also run through `FastRetryExecutionStrategy` (`Infrastructure/Persistence/FastRetryExecutionStrategy.cs`), which retries transient SQL errors — including connection timeouts — up to 40 times at a 500ms delay, so a request can ride out a slow resume rather than failing on the first attempt.
+
 ## Other local.settings.json keys
 
 `local.settings.json.example` only lists the keys every environment needs (`AzureWebJobsStorage`, `FUNCTIONS_WORKER_RUNTIME`, `ConnectionStrings:CvDatabase`). Two more sections have code-level defaults and only need overriding if you want non-default behavior locally:

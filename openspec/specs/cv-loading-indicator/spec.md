@@ -43,6 +43,13 @@ The loading placeholder SHALL use the site's monospace typeface and existing ter
 - **WHEN** the visitor toggles between dark and light theme while the loading placeholder is visible
 - **THEN** the placeholder's colors update to the corresponding theme's tokens without a page reload
 
+### Requirement: Placeholder discloses the serverless cold-start wait
+The loading placeholder SHALL display a secondary hint line, styled as a code comment (`textDim` token, smaller than the main line), telling the visitor the database is serverless and can take up to a minute to wake up. This line is static (not typed character-by-character) and is not affected by the reduced-motion preference.
+
+#### Scenario: Cold-start hint is visible while loading
+- **WHEN** the loading placeholder is rendered
+- **THEN** a secondary line below the main message states that the serverless database can take up to a minute to wake up, translated to the active language
+
 ### Requirement: Reduced-motion loading placeholder
 When the visitor's system indicates a preference for reduced motion, the loading placeholder SHALL show its text immediately without a typing animation, and SHALL NOT animate the blinking cursor.
 
