@@ -12,7 +12,7 @@ The system SHALL serve `index.html` for any request path that does not match a s
 - **THEN** Azure Static Web Apps returns `index.html` with a 200 status instead of a 404
 
 #### Scenario: API and static asset requests are not rewritten
-- **WHEN** a browser requests a path under `/api/*`, or a path matching a built static asset (JS, CSS, images, fonts)
+- **WHEN** a browser requests a path under `/api/*`, or a path matching a built static asset (JS, CSS, images, fonts) or a public file with an excluded extension (`svg`, `ico`, `png`, `jpg`, `jpeg`, `webp`, `txt`, `json`, `pdf`)
 - **THEN** the request is served normally and is NOT rewritten to `index.html`
 
 ### Requirement: Baseline security response headers

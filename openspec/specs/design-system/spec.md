@@ -61,7 +61,7 @@ The system SHALL configure a `mono` font family resolving to JetBrains Mono (wit
 - **THEN** its computed `font-family` starts with `Inter`
 
 ### Requirement: Button component
-The system SHALL provide a `Button` UI component supporting a `primary` variant (solid `accent` background, `onAccent` text) and a `secondary` variant (transparent background, `border`-colored outline, `text` colored label), with no embedded business logic — only presentation and the props needed to render it (e.g. variant, children, onClick, type, disabled).
+The system SHALL provide a `Button` UI component supporting a `primary` variant (solid `accent` background, `onAccent` text) and a `secondary` variant (transparent background, `border`-colored outline, `text` colored label), with no embedded business logic — only presentation and the props needed to render it (e.g. variant, children, onClick, type, disabled, href). When rendered with an `href` prop it SHALL render as a native `<a>` element (for links and file downloads) instead of a `<button>`, keeping the same variant styling.
 
 #### Scenario: Primary variant styling
 - **WHEN** `Button` is rendered with `variant="primary"`
@@ -70,6 +70,10 @@ The system SHALL provide a `Button` UI component supporting a `primary` variant 
 #### Scenario: Secondary variant styling
 - **WHEN** `Button` is rendered with `variant="secondary"`
 - **THEN** it renders with a `border`-colored outline and no filled background
+
+#### Scenario: Rendered as a link
+- **WHEN** `Button` is rendered with an `href` prop
+- **THEN** it renders as an `<a>` element with that `href` (and any other anchor attributes passed through, e.g. `download`) instead of a `<button>` element
 
 ### Requirement: Badge component
 The system SHALL provide a `Badge` UI component for displaying short labels (e.g. technology stack tags) as small text with a border, with no embedded business logic.
