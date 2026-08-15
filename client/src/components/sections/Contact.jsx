@@ -75,11 +75,12 @@ const EMPTY_FORM = { name: '', email: '', message: '' }
 const EMPTY_ERRORS = { name: '', email: '', message: '' }
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+const MESSAGE_MIN_LENGTH = 10
 
 const FIELD_ERROR_KEYS = {
   name: 'contact.errorRequired',
   email: 'contact.errorEmail',
-  message: 'contact.errorRequired',
+  message: 'contact.errorMessageTooShort',
 }
 
 const FIELD_CLASSES =
@@ -155,6 +156,8 @@ export default function Contact() {
   const validateField = (name, value) => {
     if (!value.trim()) return t('contact.errorRequired')
     if (name === 'email' && !EMAIL_PATTERN.test(value)) return t('contact.errorEmail')
+    if (name === 'message' && value.trim().length < MESSAGE_MIN_LENGTH)
+      return t('contact.errorMessageTooShort', { count: MESSAGE_MIN_LENGTH })
     return ''
   }
 
@@ -202,7 +205,7 @@ export default function Contact() {
         const fieldErrors = { ...EMPTY_ERRORS }
         for (const field of Object.keys(FIELD_ERROR_KEYS)) {
           if (problem.errors?.[field]?.length) {
-            fieldErrors[field] = t(FIELD_ERROR_KEYS[field])
+            fieldErrors[field] = t(FIELD_ERROR_KEYS[field], { count: MESSAGE_MIN_LENGTH })
           }
         }
         setErrors(fieldErrors)
@@ -238,6 +241,7 @@ export default function Contact() {
                 id="contact-name"
                 name="name"
                 type="text"
+                maxLength={200}
                 aria-invalid={Boolean(errors.name)}
                 aria-describedby={errors.name ? 'contact-name-error' : undefined}
                 value={form.name}
@@ -258,6 +262,7 @@ export default function Contact() {
                 id="contact-email"
                 name="email"
                 type="email"
+                maxLength={320}
                 aria-invalid={Boolean(errors.email)}
                 aria-describedby={errors.email ? 'contact-email-error' : undefined}
                 value={form.email}
@@ -278,6 +283,7 @@ export default function Contact() {
                 id="contact-message"
                 name="message"
                 rows={5}
+                maxLength={5000}
                 aria-invalid={Boolean(errors.message)}
                 aria-describedby={errors.message ? 'contact-message-error' : undefined}
                 value={form.message}
