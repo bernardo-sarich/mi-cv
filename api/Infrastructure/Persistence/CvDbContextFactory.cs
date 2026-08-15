@@ -8,7 +8,7 @@ public class CvDbContextFactory : IDesignTimeDbContextFactory<CvDbContext>
     public CvDbContext CreateDbContext(string[] args)
     {
         var optionsBuilder = new DbContextOptionsBuilder<CvDbContext>();
-        optionsBuilder.UseSqlServer("Server=localhost;Database=CvDatabase;Trusted_Connection=True;TrustServerCertificate=True;");
+        optionsBuilder.UseNpgsql("Host=localhost;Database=cvdatabase;Username=postgres;Password=postgres");
 
         return new CvDbContext(optionsBuilder.Options);
     }

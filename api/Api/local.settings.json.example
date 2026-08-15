@@ -5,7 +5,7 @@
     "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated"
   },
   "ConnectionStrings": {
-    "CvDatabase": "Server=localhost;Database=CvDatabase;Trusted_Connection=True;TrustServerCertificate=True;"
+    "CvDatabase": "Host=localhost;Database=cvdatabase;Username=postgres;Password=changeme"
   },
   "EmailNotification": {
     "SmtpHost": "smtp.gmail.com",

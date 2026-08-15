@@ -34,7 +34,7 @@ if (!File.Exists(cvDataPath))
 var locales = ParseCvData(cvDataPath);
 
 var optionsBuilder = new DbContextOptionsBuilder<CvDbContext>();
-optionsBuilder.UseSqlServer(connectionString);
+optionsBuilder.UseNpgsql(connectionString);
 
 await using var db = new CvDbContext(optionsBuilder.Options);
 
