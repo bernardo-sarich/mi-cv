@@ -39,6 +39,7 @@ public class EfCvRepository(IDbContextFactory<CvDbContext> dbContextFactory) : I
         await using var dbContext = await dbContextFactory.CreateDbContextAsync(cancellationToken);
         return await dbContext.Experiences
             .Where(e => e.Language == language)
+            .OrderBy(e => e.Id)
             .ToListAsync(cancellationToken);
     }
 
@@ -47,6 +48,7 @@ public class EfCvRepository(IDbContextFactory<CvDbContext> dbContextFactory) : I
         await using var dbContext = await dbContextFactory.CreateDbContextAsync(cancellationToken);
         return await dbContext.Projects
             .Where(p => p.Language == language)
+            .OrderBy(p => p.Id)
             .ToListAsync(cancellationToken);
     }
 
@@ -55,6 +57,7 @@ public class EfCvRepository(IDbContextFactory<CvDbContext> dbContextFactory) : I
         await using var dbContext = await dbContextFactory.CreateDbContextAsync(cancellationToken);
         return await dbContext.SkillCategories
             .Where(s => s.Language == language)
+            .OrderBy(s => s.Id)
             .ToListAsync(cancellationToken);
     }
 }
