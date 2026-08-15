@@ -19,7 +19,10 @@ public static class ServiceCollectionExtensions
 
         services.AddScoped<CvDbContext>(sp => sp.GetRequiredService<IDbContextFactory<CvDbContext>>().CreateDbContext());
 
-        services.AddScoped<ICvRepository, EfCvRepository>();
+        services.AddScoped<IProfileRepository, EfProfileRepository>();
+        services.AddScoped<IExperienceRepository, EfExperienceRepository>();
+        services.AddScoped<IProjectRepository, EfProjectRepository>();
+        services.AddScoped<ISkillCategoryRepository, EfSkillCategoryRepository>();
         services.AddScoped<IContactRepository, EfContactRepository>();
         services.AddScoped<IContactAttemptStore, EfContactAttemptStore>();
         services.AddScoped<IContactNotifier, SmtpContactNotifier>();

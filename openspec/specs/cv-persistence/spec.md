@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Provides the EF Core-backed implementation of the `ICvRepository` and `IContactRepository` ports, mapping Domain entities onto relational tables in a managed Postgres database without leaking persistence concerns into Domain or Application.
+Provides the EF Core-backed implementations of the per-aggregate CV read ports (`IProfileRepository`, `IExperienceRepository`, `IProjectRepository`, `ISkillCategoryRepository`) and the `IContactRepository` port, mapping Domain entities onto relational tables in a managed Postgres database without leaking persistence concerns into Domain or Application.
 
 ## Requirements
 
@@ -24,12 +24,24 @@ All entity-to-table mapping SHALL be configured through Fluent API (`OnModelCrea
 - **WHEN** the `DbContext`'s `OnModelCreating` method is inspected
 - **THEN** it contains the Fluent API configuration for every mapped entity's table, keys, and relationships
 
-### Requirement: ICvRepository is implemented against EF Core
-The system SHALL provide an implementation of `ICvRepository` that reads `Profile`, `Experience`, `Project`, and `SkillCategory` data for a given `Language` via the `DbContext`, returning `Domain` types.
+### Requirement: Per-aggregate CV read ports are implemented against EF Core
+The system SHALL provide four EF Core-backed implementations, one per independent Domain aggregate: a `Profile` reader (including its `Stat` rows), an `Experience` reader, a `Project` reader, and a `SkillCategory` reader. Each SHALL read only its own aggregate's rows for a given `Language` via the `DbContext`, returning `Domain` types, and SHALL NOT read or assemble any other aggregate's data.
 
-#### Scenario: Reading the CV returns only the requested language's rows
-- **WHEN** the EF-backed `ICvRepository` implementation's read operation is called with a supported `Language`
-- **THEN** it queries the underlying tables filtered to that `Language` and returns `Domain` entities assembled into a `CvContent`
+#### Scenario: Reading the profile returns only that language's profile and stats
+- **WHEN** the EF-backed profile reader is called with a supported `Language`
+- **THEN** it queries the `Profile` and `Stat` tables filtered to that `Language` and returns a `Domain` `Profile` including its stats
+
+#### Scenario: Reading experience returns only that language's rows
+- **WHEN** the EF-backed experience reader is called with a supported `Language`
+- **THEN** it queries the `Experience` table filtered to that `Language` and returns `Domain` `Experience` entities, with no `Profile`, `Project`, or `SkillCategory` data included
+
+#### Scenario: Reading projects returns only that language's rows
+- **WHEN** the EF-backed project reader is called with a supported `Language`
+- **THEN** it queries the `Project` table filtered to that `Language` and returns `Domain` `Project` entities, with no `Profile`, `Experience`, or `SkillCategory` data included
+
+#### Scenario: Reading skills returns only that language's rows
+- **WHEN** the EF-backed skill category reader is called with a supported `Language`
+- **THEN** it queries the `SkillCategory` table filtered to that `Language` and returns `Domain` `SkillCategory` entities, with no `Profile`, `Experience`, or `Project` data included
 
 ### Requirement: IContactRepository is implemented against EF Core
 The system SHALL provide an implementation of `IContactRepository` that persists a `ContactMessage` via the `DbContext`.
@@ -39,11 +51,11 @@ The system SHALL provide an implementation of `IContactRepository` that persists
 - **THEN** a corresponding row is added to the `ContactMessage` table and persisted on `SaveChanges`
 
 ### Requirement: Persistence implementations are registered for DI
-The system SHALL register the `DbContext` and both EF-backed repository implementations in Infrastructure's dependency injection setup, resolving the database connection string from configuration.
+The system SHALL register the `DbContext` and the EF-backed implementations of `IProfileRepository`, `IExperienceRepository`, `IProjectRepository`, `ISkillCategoryRepository`, and `IContactRepository` in Infrastructure's dependency injection setup, resolving the database connection string from configuration.
 
 #### Scenario: Infrastructure registration wires the EF implementations
 - **WHEN** Infrastructure's service registration extension is invoked
-- **THEN** `ICvRepository` resolves to the EF-backed implementation and `IContactRepository` resolves to the EF-backed implementation, both backed by a `DbContext` configured from a configuration-provided connection string
+- **THEN** `IProfileRepository`, `IExperienceRepository`, `IProjectRepository`, `ISkillCategoryRepository`, and `IContactRepository` each resolve to their EF-backed implementation, all backed by a `DbContext` configured from a configuration-provided connection string
 
 ### Requirement: Transient connection failures are retried automatically
 The system SHALL configure the `DbContext` to automatically retry database operations that fail due to a transient connection error (for example, the database resuming from an auto-suspended state), using a short delay between attempts, before surfacing the failure to the caller.
