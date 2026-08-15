@@ -1,11 +1,11 @@
 # mi-cv
 
-CV interactivo full-stack: SPA en React 19 + API en .NET 9 sobre Azure Functions, con Azure SQL como base de datos, todo desplegado como un único Azure Static Web App. Repo público, pensado tanto como sitio personal como como muestra de código para procesos de selección.
+CV interactivo full-stack: SPA en React 19 + API en .NET 9 sobre Azure Functions, con Neon Postgres serverless como base de datos, todo desplegado como un único Azure Static Web App. Repo público, pensado tanto como sitio personal como como muestra de código para procesos de selección.
 
 ## Demo y stack
 
 - **Frontend**: React 19 (JSX puro, sin TypeScript) + Vite 8 + Tailwind CSS v4 + framer-motion + i18next (es/en).
-- **Backend**: Azure Functions, .NET 9 isolated worker, Clean/Hexagonal Architecture, EF Core 9 contra Azure SQL Database, notificación por email vía SMTP/MailKit, OpenTelemetry hacia Azure Monitor.
+- **Backend**: Azure Functions, .NET 9 isolated worker, Clean/Hexagonal Architecture, EF Core 9 contra Neon Postgres (serverless, fuera de la red de Azure), notificación por email vía SMTP/MailKit, OpenTelemetry hacia Azure Monitor.
 - **Infra**: Azure Static Web Apps (free tier) sirviendo el build de Vite y proxyeando `/api/*` a la Function App; CI/CD con GitHub Actions (`azure-static-web-apps-*.yml`) — cada push a `main` builda y despliega ambos proyectos.
 - **Planificación**: [OpenSpec](https://github.com/Fission-AI/OpenSpec) para specs vivas y change proposals, en `openspec/`.
 
@@ -25,13 +25,15 @@ La eligo a propósito, no por defecto: quería mostrar cómo organizo un backend
 
 **Trade-off asumido**: más archivos e indirección de la que un CRUD de este tamaño pediría. Lo pagué a propósito por legibilidad y por dejar cada capa testeable de forma aislada (aunque los tests en sí todavía no existen — ver deuda técnica).
 
-### 2. Azure Static Web Apps + Functions + SQL, todo en el tier gratuito
+### 2. Azure Static Web Apps + Functions + Neon Postgres, todo en el tier gratuito
 
 Elegí Azure SWA en vez de, por ejemplo, Vercel/Netlify + un backend separado, porque SWA integra en un solo recurso el hosting estático, el proxy a `/api/*`, y el ciclo de vida de una Function App — sin CORS real entre front y back (mismo origen desde la perspectiva del browser) y sin pagar por infraestructura mientras el proyecto no tenga tráfico.
 
 **Consecuencia que tuve que diseñar alrededor**: las Functions en el plan Consumption tienen cold start. La primera visita de un dispositivo puede tardar varios segundos en traer el CV si la Function (y la base de datos serverless) estaban dormidas. Encaré esto en el cliente, no escalando infraestructura: un `LoadingScreen` con estética de terminal que se muestra solo si el fetch tarda más de 250ms (evita el flash en cargas ya calientes) — ver `openspec/specs/cv-loading-indicator/spec.md` y `client/src/App.jsx`. Es una solución de UX a un problema de infraestructura, elegida porque el costo cero pesaba más que eliminar el cold start con un plan pago.
 
-**Azure SQL** corre en el *free offer* (serverless, persistente, sin costo). Mismo criterio: para el volumen de datos de un CV (unas pocas tablas, lectura predominante), pagar por una base gestionada más cara no se justificaba.
+**De Azure SQL a Neon Postgres, forzado por un incidente real.** La base arrancó en Azure SQL serverless (*free offer*, `autoPauseDelay=60`), con el mismo criterio de costo cero de arriba. En producción esa base tarda ~45s en resumir desde el auto-pausado, y ese tiempo excede el timeout duro de 45s que tiene la Function App en el plan gratuito de Static Web Apps: confirmé una request real que llegó con la base pausada y que SWA cortó en el mismo segundo en que la base terminaba de resumir, devolviendo `500 Backend call failure` en vez de datos. Subir `autoPauseDelay` o mantener la base despierta con un keep-alive hubiese agotado el presupuesto de cómputo gratuito de Azure SQL (100.000 vCore-segundos/mes, ≈55h de uptime) en un par de días. Neon Postgres también se auto-suspende en su free tier (a los 5 minutos de inactividad), pero resume en menos de un segundo (medido: 300ms–1.8s) — bien por debajo del techo de 45s, sin resignar el tier gratuito ni mover las lecturas fuera de la base al momento del request.
+
+La migración cambió el proveedor de EF Core (`Npgsql.EntityFrameworkCore.PostgreSQL` en vez de `Microsoft.EntityFrameworkCore.SqlServer`), obligó a regenerar las migraciones desde cero (los tipos de columna de SQL Server no son portables a Postgres) y permitió reemplazar un retry custom de 40 intentos a 500ms fijo (dimensionado para los 45s de resume de Azure SQL) por el retry estándar de Npgsql, mucho más simple, ya que Neon resume en menos de un segundo. Como efecto colateral de quedar fuera de la red de Azure, la latencia de red pesa más: `EfCvRepository.GetCvAsync` pasó de cuatro consultas secuenciales a cuatro en paralelo (`IDbContextFactory<CvDbContext>` + `Task.WhenAll`, una por cada entidad del CV). El detalle completo — alternativas consideradas, riesgos asumidos, plan de rollback — quedó documentado en `openspec/changes/archive/2026-08-15-migrate-db-to-neon-postgres/`.
 
 ### 3. Modelo relacional con EF Core, no un JSON servido tal cual
 
