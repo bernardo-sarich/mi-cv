@@ -41,7 +41,7 @@ export default function Hero() {
   const { t } = useTranslation()
   const typed = useTypingEffect('who-am-i', 70)
   const { data } = useCVData()
-  const typedBio = useTypingEffect(data?.bio, 45)
+  const typedBio = useTypingEffect(data?.bio, 22.5)
   const [statsRef, statsVisible] = useScrollReveal('hero-stats', {
     threshold: 0.3,
   })
