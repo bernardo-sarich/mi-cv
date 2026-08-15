@@ -41,7 +41,6 @@ export default function Hero() {
   const { t } = useTranslation()
   const typed = useTypingEffect('Bernardo-Sarich-Backend-NET+AI', 70)
   const { data } = useCVData()
-  const typedBio = useTypingEffect(data?.bio, 22.5)
   const [statsRef, statsVisible] = useScrollReveal('hero-stats', {
     threshold: 0.3,
   })
@@ -91,7 +90,7 @@ export default function Hero() {
             variants={blockVariants}
             className="max-w-prose text-textDim dark:text-dark-textDim"
           >
-            {reduced ? data.bio : typedBio}
+            {data.bio}
           </motion.p>
         </motion.div>
 
