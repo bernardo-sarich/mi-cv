@@ -1,31 +1,23 @@
 using Application.Ports;
 using Infrastructure.Email;
 using Infrastructure.Persistence;
-using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Npgsql;
 
 namespace Infrastructure;
 
 public static class ServiceCollectionExtensions
 {
-    // Azure SQL serverless auto-resume can take longer than SqlClient's 15s default
-    // connect timeout; Microsoft recommends 30s for serverless tiers so a single
-    // connection attempt has a real chance of landing while the database wakes up.
-    private const int ConnectTimeoutSeconds = 30;
-
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
-        var connectionStringBuilder = new SqlConnectionStringBuilder(configuration.GetConnectionString("CvDatabase"))
-        {
-            ConnectTimeout = ConnectTimeoutSeconds,
-        };
+        var connectionString = new NpgsqlConnectionStringBuilder(configuration.GetConnectionString("CvDatabase")).ConnectionString;
 
-        services.AddDbContext<CvDbContext>(options =>
-            options.UseSqlServer(
-                connectionStringBuilder.ConnectionString,
-                sql => sql.ExecutionStrategy(dependencies => new FastRetryExecutionStrategy(dependencies))));
+        services.AddDbContextFactory<CvDbContext>(options =>
+            options.UseNpgsql(connectionString, npgsql => npgsql.EnableRetryOnFailure()));
+
+        services.AddScoped<CvDbContext>(sp => sp.GetRequiredService<IDbContextFactory<CvDbContext>>().CreateDbContext());
 
         services.AddScoped<ICvRepository, EfCvRepository>();
         services.AddScoped<IContactRepository, EfContactRepository>();

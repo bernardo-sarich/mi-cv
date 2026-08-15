@@ -10,7 +10,7 @@ Azure Functions isolated worker (.NET 9) backing `mi-cv`, organized as Clean/Hex
    cp Api/local.settings.json.example Api/local.settings.json
    ```
 
-   Edit `Api/local.settings.json` and set `ConnectionStrings:CvDatabase` to a database you control (a local SQL Server / SQL Server Express / Docker instance, or your own Azure SQL Database free-tier instance). This file is gitignored — it never gets committed, and no secret value should ever be added to `local.settings.json.example`.
+   Edit `Api/local.settings.json` and set `ConnectionStrings:CvDatabase` to a database you control (a local Postgres / Docker instance, or your own Neon free-tier project). This file is gitignored — it never gets committed, and no secret value should ever be added to `local.settings.json.example`.
 
 2. Apply the EF Core migrations to create the schema:
 
@@ -43,7 +43,9 @@ The connection string is never stored in the repo. It's supplied per environment
 
 ## Serverless cold start
 
-`Infrastructure/ServiceCollectionExtensions.cs` overrides `ConnectTimeout` to 30 seconds on whatever `ConnectionStrings:CvDatabase` is configured (local or deployed), instead of relying on `SqlClient`'s 15s default — Microsoft recommends 30s for Azure SQL serverless databases, since auto-resume from a paused state can take longer than 15s. This is applied in code so it doesn't need to be repeated in every environment's connection string. `EfCvRepository`/`EfContactRepository` calls also run through `FastRetryExecutionStrategy` (`Infrastructure/Persistence/FastRetryExecutionStrategy.cs`), which retries transient SQL errors — including connection timeouts — up to 40 times at a 500ms delay, so a request can ride out a slow resume rather than failing on the first attempt.
+The database is a Neon Postgres serverless project, which auto-suspends after a period of inactivity and resumes on the next connection — typically in well under a second. `Infrastructure/ServiceCollectionExtensions.cs` configures `UseNpgsql(..., npgsql => npgsql.EnableRetryOnFailure())`, Npgsql's standard bounded retry for transient connection errors, so a request that lands right as the database is resuming doesn't fail on the first attempt. There's no custom retry strategy or extended connect timeout — Neon's resume is fast enough that the provider's defaults are sufficient (this is a deliberate contrast with Azure SQL serverless, which this project used previously and whose ~45s auto-resume needed a much longer custom retry window).
+
+When connecting to Neon from a deployed environment (as opposed to local development), use the **pooled** connection endpoint (the host with a `-pooler` suffix in the Neon dashboard) rather than the direct host — Azure Functions Consumption plan instances can open many short-lived connections, and Neon's built-in PgBouncer pooler handles that better than direct connections.
 
 ## Other local.settings.json keys
 
