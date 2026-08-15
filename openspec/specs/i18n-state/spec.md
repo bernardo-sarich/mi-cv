@@ -6,12 +6,16 @@ Provides global language state and fixed UI-chrome translations (nav, buttons, f
 
 ## Requirements
 
-### Requirement: Spanish default language
-The system SHALL initialize with Spanish (`es`) as the active and fallback language when the app starts with no prior language selection.
+### Requirement: Browser-detected initial language
+The system SHALL initialize the active language by inspecting the browser's reported language preference: `es` when the browser's primary language is an `es-*` locale, and `en` for any other browser language. The fallback language SHALL remain `es`.
 
-#### Scenario: App starts in Spanish
-- **WHEN** the app starts with no prior language state
+#### Scenario: Browser reports a Spanish locale
+- **WHEN** the app starts with no prior language state and the browser's primary language is an `es-*` locale (e.g., `es-AR`, `es-ES`)
 - **THEN** the active language is `es` and UI chrome text renders using the Spanish translations
+
+#### Scenario: Browser reports a non-Spanish locale
+- **WHEN** the app starts with no prior language state and the browser's primary language is not an `es-*` locale (e.g., `en-US`, `pt-BR`, `fr`)
+- **THEN** the active language is `en` and UI chrome text renders using the English translations
 
 ### Requirement: Supported UI chrome translation keys
 The system SHALL provide Spanish and English translations for the following fixed UI-chrome keys: `nav.about`, `nav.experience`, `nav.projects`, `nav.contact`, `hero.downloadCv`, `hero.viewProjects`, `experience.title`, `skills.title`, `projects.title`, `projects.viewRepo`, `contact.title`, `contact.formName`, `contact.formEmail`, `contact.formMessage`, `contact.formSubmit`, `contact.formSent`, `theme.switchToLight`, `theme.switchToDark`, `lang.switchToEn`, `lang.switchToEs`.
@@ -34,7 +38,7 @@ The system SHALL re-render all UI chrome text using the newly selected language 
 - **THEN** UI chrome elements bound to the translation keys immediately display their Spanish text
 
 ### Requirement: Language toggle control
-The system SHALL provide a user-facing control that displays the current active language and switches the active language when activated, transitioning its own visual content with a crossfade of approximately 150-200ms.
+The system SHALL provide a user-facing control that displays the current active language and switches the active language when activated, transitioning its own visual content with a crossfade of approximately 150-200ms. The control SHALL also display a globe icon alongside the language label to visually signal that it is a language switcher.
 
 #### Scenario: Activating control switches language
 - **WHEN** the user activates the language toggle control
@@ -43,6 +47,10 @@ The system SHALL provide a user-facing control that displays the current active 
 #### Scenario: Control content crossfades on change
 - **WHEN** the active language changes
 - **THEN** the control's visual content transitions with an opacity crossfade lasting approximately 150-200ms rather than changing abruptly
+
+#### Scenario: Control displays a globe icon
+- **WHEN** the language toggle control is rendered
+- **THEN** a globe icon is visible alongside the current language label
 
 ### Requirement: Language toggle accessible name
 The language toggle control SHALL expose a descriptive `aria-label` naming the action it performs (switching to the other supported language), rather than relying solely on its visible text, and that label SHALL update to reflect the target language whenever the active language changes.

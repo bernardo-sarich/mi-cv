@@ -4,10 +4,14 @@ import { getCVData } from '../lib/api.js'
 
 const AppContext = createContext(null)
 
+function detectInitialLang() {
+  return navigator.language?.toLowerCase().startsWith('es') ? 'es' : 'en'
+}
+
 export function AppProvider({ children }) {
   const { i18n } = useTranslation()
   const [theme, setTheme] = useState('dark')
-  const [lang, setLang] = useState(i18n.language?.slice(0, 2) || 'es')
+  const [lang, setLang] = useState(detectInitialLang)
   const [cvData, setCvData] = useState(null)
   const [cvLoading, setCvLoading] = useState(true)
   const [cvError, setCvError] = useState(null)
