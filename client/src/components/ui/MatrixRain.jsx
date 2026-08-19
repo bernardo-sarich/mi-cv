@@ -8,12 +8,13 @@ const MIN_VIEWPORT = 1280
 const FONT_SIZE = 14
 const FRAME_MS = 1000 / 18
 const FADE_ALPHA = 0.08
-const LAYER_OPACITY = 0.31
+const LAYER_OPACITY = 0.42
 
-// Mirrors the `accent` / `dark-accent` tokens in tailwind.config.js. Not read
-// from CSS: index.css defines `--accent` as #aa3bff from a leftover template
-// palette, unrelated to the site's green accent.
-const ACCENT_BY_THEME = { dark: '#3ddc84', light: '#19804b' }
+// Mirrors the `dark-accent` token in tailwind.config.js. Not read from CSS:
+// index.css defines `--accent` as #aa3bff from a leftover template palette,
+// unrelated to this. The effect only ever renders in dark theme (see
+// `enabled` below), so there is no light-theme counterpart to switch to.
+const RAIN_COLOR = '#3ddc84'
 
 const CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789{}[]<>/\\|=+*-#$%&@'
 
@@ -41,19 +42,11 @@ function measureGutter() {
 
 export default function MatrixRain({ side }) {
   const canvasRef = useRef(null)
-  const colorRef = useRef(ACCENT_BY_THEME.dark)
   const { theme } = useTheme()
 
   const isWide = useMediaQuery(`(min-width: ${MIN_VIEWPORT}px)`)
   const prefersReducedMotion = useMediaQuery('(prefers-reduced-motion: reduce)')
-  const enabled = isWide && !prefersReducedMotion
-
-  // Kept in a ref so the draw loop picks up the new accent on its next frame.
-  // As an effect dependency it would tear down and rebuild the loop on every
-  // toggle, visibly restarting the rain.
-  useEffect(() => {
-    colorRef.current = ACCENT_BY_THEME[theme] ?? ACCENT_BY_THEME.dark
-  }, [theme])
+  const enabled = isWide && !prefersReducedMotion && theme === 'dark'
 
   useEffect(() => {
     if (!enabled) return
@@ -96,11 +89,14 @@ export default function MatrixRain({ side }) {
     function draw() {
       // Erase instead of painting a background-colored rect, so the canvas
       // stays transparent and the page background shows through untouched.
+      // destination-out erases by the source's alpha channel only — the
+      // `0, 0, 0` RGB here is never actually painted — so this fade needs
+      // no per-theme handling.
       ctx.globalCompositeOperation = 'destination-out'
       ctx.fillStyle = `rgba(0, 0, 0, ${FADE_ALPHA})`
       ctx.fillRect(0, 0, width, height)
       ctx.globalCompositeOperation = 'source-over'
-      ctx.fillStyle = colorRef.current
+      ctx.fillStyle = RAIN_COLOR
 
       for (let i = 0; i < columns.length; i++) {
         const column = columns[i]

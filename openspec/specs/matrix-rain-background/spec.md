@@ -62,6 +62,21 @@ The rain layers SHALL be rendered only when the viewport is at least 1280px wide
 - **WHEN** the viewport is resized from 1400px to 1100px
 - **THEN** the rain layers are removed from the document and their animation stops
 
+### Requirement: Effect is limited to dark theme
+The rain layers SHALL be rendered only when the active theme is dark. In light theme no layer SHALL exist in the document regardless of viewport width or reduced-motion preference, and the effect SHALL be added or removed as the theme changes in either direction.
+
+#### Scenario: Light theme omits the effect entirely
+- **WHEN** the page is displayed in light theme at a viewport width of 1600px with reduced motion not requested
+- **THEN** no rain layer exists in the document and no animation for the effect is running
+
+#### Scenario: Effect appears when switching to dark theme
+- **WHEN** the user switches from light to dark theme while the viewport is at least 1280px wide and reduced motion is not requested
+- **THEN** the rain layers appear
+
+#### Scenario: Effect is torn down when switching to light theme
+- **WHEN** the user switches from dark to light theme while the rain layers are rendered
+- **THEN** the rain layers are removed from the document and their animation stops
+
 ### Requirement: Reduced-motion preference suppresses the effect
 When the user's system indicates a preference for reduced motion, the system SHALL NOT render the rain layers at all — neither as a static nor as a slowed-down variant.
 
@@ -80,27 +95,19 @@ The rain layers SHALL be exposed as decorative content only: hidden from the acc
 - **WHEN** the user tabs through the page from top to bottom
 - **THEN** focus never lands on a rain layer
 
-### Requirement: Rain color follows the active theme
-The falling characters SHALL be drawn in the site's `accent` color for the currently active theme — `#3ddc84` in dark theme and `#19804b` in light theme — and SHALL update to the other theme's accent when the user toggles the theme, without requiring a page reload.
+### Requirement: Rain color is fixed
+The falling characters SHALL always be drawn in `#3ddc84` — the same fixed color regardless of any other state, since the effect only ever renders in dark theme.
 
-#### Scenario: Dark theme uses the dark accent
-- **WHEN** the layers are rendered with the dark theme active
+#### Scenario: Effect always uses the same color
+- **WHEN** the layers are rendered
 - **THEN** the falling characters are drawn in `#3ddc84`
 
-#### Scenario: Light theme uses the light accent
-- **WHEN** the layers are rendered with the light theme active
-- **THEN** the falling characters are drawn in `#19804b`
-
-#### Scenario: Toggling the theme recolors the effect
-- **WHEN** the user activates the theme toggle while the layers are rendered
-- **THEN** subsequently drawn characters use the newly active theme's accent color
-
 ### Requirement: Restrained ambient visual treatment
-The effect SHALL read as background texture rather than a focal element: characters SHALL be drawn at an effective opacity between 0.15 and 0.35, SHALL fall at a slow and even rate, and SHALL NOT produce abrupt flashing, strobing, or high-frequency flicker. Characters SHALL be drawn from a mixed set of letters, digits, and symbols in the site's monospace typeface.
+The effect SHALL read as background texture rather than a focal element: characters SHALL be drawn at an effective opacity between 0.15 and 0.45, SHALL fall at a slow and even rate, and SHALL NOT produce abrupt flashing, strobing, or high-frequency flicker. Characters SHALL be drawn from a mixed set of letters, digits, and symbols in the site's monospace typeface.
 
 #### Scenario: Effect stays low-contrast against the background
 - **WHEN** the layers are rendered
-- **THEN** the drawn characters' effective opacity is within the range 0.15–0.35
+- **THEN** the drawn characters' effective opacity is within the range 0.15–0.45
 
 #### Scenario: Fall motion is steady and non-flashing
 - **WHEN** the effect runs continuously
