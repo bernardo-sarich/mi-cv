@@ -3,6 +3,7 @@ import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
 import { useCVData, useLang } from '../../context/AppContext.jsx'
 import { CONTACT_INFO } from '../../data/contact-info.js'
+import { containsOffensiveContent } from '../../lib/contentFilter.js'
 import SectionLabel from '../ui/SectionLabel.jsx'
 import SectionTitle from '../ui/SectionTitle.jsx'
 import Card from '../ui/Card.jsx'
@@ -158,6 +159,7 @@ export default function Contact() {
     if (name === 'email' && !EMAIL_PATTERN.test(value)) return t('contact.errorEmail')
     if (name === 'message' && value.trim().length < MESSAGE_MIN_LENGTH)
       return t('contact.errorMessageTooShort', { count: MESSAGE_MIN_LENGTH })
+    if (containsOffensiveContent(value)) return t('contact.errorOffensive')
     return ''
   }
 

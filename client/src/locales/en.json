@@ -46,6 +46,7 @@
     "errorRequired": "This field is required",
     "errorEmail": "Enter a valid email address",
     "errorMessageTooShort": "Write at least {{count}} characters",
+    "errorOffensive": "The message contains inappropriate language",
     "errorRateLimit": "Too many attempts. Please try again in a few minutes.",
     "errorGeneric": "Couldn't send the message. Please try again."
   }
