@@ -40,14 +40,18 @@ The Experience section SHALL render the list of job entries from the CV content 
 - **THEN** the job entries' role, company, dates, and bullets update to that language's content without a page reload
 
 ### Requirement: Scroll-triggered job reveal
-Each job entry SHALL be visually hidden (transparent, offset downward) until it scrolls into the central band of the viewport, at which point it SHALL animate to fully visible with a fade-in and slide-up transition, so entries reveal one at a time as the visitor scrolls rather than all at once.
+Each job entry after the first SHALL be visually hidden (transparent, offset downward) until it scrolls into the central band of the viewport, at which point it SHALL animate to fully visible with a fade-in and slide-up transition, so entries reveal one at a time as the visitor scrolls rather than all at once. The first job entry SHALL NOT be gated behind scroll position — it SHALL play its fade-in and slide-up transition as soon as it is rendered, since it can land outside the central band before the visitor ever scrolls and gating it the same way as later entries would leave the section looking empty on load.
 
-#### Scenario: Job is hidden before reaching the central band
-- **WHEN** a job entry has not yet scrolled into the central band of the viewport
+#### Scenario: First job reveals immediately
+- **WHEN** the Experience section is rendered
+- **THEN** the first job entry begins its fade-in and slide-up transition immediately, without waiting for any scroll position
+
+#### Scenario: Later job is hidden before reaching the central band
+- **WHEN** a job entry after the first has not yet scrolled into the central band of the viewport
 - **THEN** it remains transparent and offset from its final position
 
-#### Scenario: Job reveals on reaching the central band
-- **WHEN** a job entry first scrolls into the central band of the viewport
+#### Scenario: Later job reveals on reaching the central band
+- **WHEN** a job entry after the first scrolls into the central band of the viewport for the first time
 - **THEN** it transitions to fully opaque and its final position via a fade-in and slide-up animation
 
 ### Requirement: Cascading bullet reveal

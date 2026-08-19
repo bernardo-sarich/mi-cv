@@ -31,11 +31,18 @@ function Job({ job, index }) {
   const bulletContainerVariants = getBulletContainerVariants(reduced)
   const bulletVariants = getBulletVariants(reduced)
 
+  // The first job sits high enough on the page that it can land outside the
+  // reveal's intentionally narrow intersection band (rootMargin shrinks the
+  // observed viewport to its central 30%) before the visitor ever scrolls —
+  // without this it would render invisible on load instead of gating on
+  // scroll like every later entry still does.
+  const revealed = index === 0 || isVisible
+
   return (
     <motion.li
       ref={ref}
       initial={{ opacity: 0, y: 24 }}
-      animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
+      animate={revealed ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
       transition={{ duration: reduced ? 0 : 0.5 }}
       className="grid gap-1 md:grid-cols-[10rem_minmax(0,1fr)] md:gap-0"
     >
@@ -57,7 +64,7 @@ function Job({ job, index }) {
         <motion.ul
           variants={bulletContainerVariants}
           initial="hidden"
-          animate={isVisible ? 'show' : 'hidden'}
+          animate={revealed ? 'show' : 'hidden'}
           className="mt-2 flex flex-col items-start gap-1.5"
         >
           {job.bullets.map((bullet) => (
