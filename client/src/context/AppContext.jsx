@@ -29,22 +29,24 @@ export function AppProvider({ children }) {
   }, [lang, i18n])
 
   useEffect(() => {
-    let cancelled = false
+    const controller = new AbortController()
+    let current = true
     setCvLoading(true)
 
-    getCVData(lang)
+    getCVData(lang, controller.signal)
       .then((result) => {
-        if (!cancelled) setCvData(result)
+        if (current) setCvData(result)
       })
       .catch((err) => {
-        if (!cancelled) setCvError(err)
+        if (current) setCvError(err)
       })
       .finally(() => {
-        if (!cancelled) setCvLoading(false)
+        if (current) setCvLoading(false)
       })
 
     return () => {
-      cancelled = true
+      current = false
+      controller.abort()
     }
   }, [lang])
 

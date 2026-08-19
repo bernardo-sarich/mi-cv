@@ -1,17 +1,4 @@
-# cv-data-layer Specification
-
-## Purpose
-
-Provides the single source of bilingual CV content and the accessor/hook that section components use to read it, structured so a future real API can be swapped in behind the same interface without touching consuming components.
-
-## Requirements
-
-### Requirement: Bilingual content structure
-The system SHALL store all person-specific CV content in one local data source keyed by the two supported language codes (`es`, `en`), with each language entry containing: `bio`, `stats`, `experience`, `skills`, and `projects`. Contact information (GitHub/LinkedIn/email) is not part of this content source; it is provided by a separate, dedicated client-side source outside this capability.
-
-#### Scenario: Both languages hold the same structure
-- **WHEN** the content source is loaded
-- **THEN** the `es` and `en` entries each provide `bio`, `stats`, `experience`, `skills`, and `projects` fields, with no field present in one language and absent in the other, and neither entry carries a `contact` field
+## MODIFIED Requirements
 
 ### Requirement: Language-scoped content accessor
 The system SHALL provide a function that, given a requested language code, returns only that language's content object, without requiring the caller to know the underlying storage shape. The accessor SHALL fetch this content from the real CV API. If the fetch fails for any reason (network error, non-2xx response), the accessor SHALL fall back to the local mock content for the requested language instead of rejecting. The accessor SHALL bound the fetch with a fixed timeout (15-20 seconds); if the fetch has not completed within that timeout, the accessor SHALL abort it and fall back to the local mock content for the requested language, the same as any other fetch failure.
@@ -46,10 +33,3 @@ The system SHALL expose CV content to section components through a hook that ret
 #### Scenario: Switching language cancels the superseded in-flight request
 - **WHEN** the visitor switches the site language again before the content request for the previous language has resolved
 - **THEN** the hook cancels (aborts) the previous language's in-flight request instead of letting it continue to completion in the background
-
-### Requirement: No component reads the data file directly
-Section components SHALL obtain CV content only through the section content hook, never by importing the underlying data file.
-
-#### Scenario: Section components have no direct data import
-- **WHEN** the Hero, Experience, Skills, Projects, or Contact component source is inspected
-- **THEN** none of them import the CV content data file directly; each obtains content through the hook

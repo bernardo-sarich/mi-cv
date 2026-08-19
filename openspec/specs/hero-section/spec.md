@@ -55,12 +55,12 @@ The Hero section SHALL display the bio paragraph from the CV content data beneat
 - **WHEN** the Hero section mounts (or the bio text changes) with `prefers-reduced-motion: reduce` in effect
 - **THEN** the full bio text is shown immediately below the name/status/role header, with no character-by-character typing animation
 
-### Requirement: Primary call-to-action buttons
-The Hero section SHALL render two call-to-action buttons: a primary-styled "Descargar CV" button with no attached download behavior, and a secondary-styled "Ver proyectos →" button that smoothly scrolls the viewport to the `projects` section when activated.
+### Requirement: Hero call-to-action buttons
+The Hero section SHALL render two call-to-action buttons: a primary-styled "Descargar CV" button that downloads the CV PDF matching the site's current language when activated (see `cv-download` for the full download behavior), and a secondary-styled "Ver proyectos →" button that smoothly scrolls the viewport to the `projects` section when activated.
 
-#### Scenario: Download CV button is present but inert
-- **WHEN** the Hero section is rendered
-- **THEN** a primary-styled button labeled "Descargar CV" is shown, and activating it does not trigger a file download or navigation
+#### Scenario: Download CV button downloads the CV
+- **WHEN** the visitor activates the "Descargar CV" button
+- **THEN** the CV PDF matching the site's current language is downloaded, without a full page navigation
 
 #### Scenario: View projects button scrolls to projects section
 - **WHEN** the user activates the "Ver proyectos →" button
