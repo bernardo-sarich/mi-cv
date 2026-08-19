@@ -15,8 +15,10 @@
     "viewProjects": "Ver proyectos"
   },
   "theme": {
-    "switchToLight": "Cambiar a modo claro",
-    "switchToDark": "Cambiar a modo oscuro"
+    "developerMode": "Modo Desarrollador",
+    "corporateMode": "Modo Standard",
+    "switchToDeveloperMode": "Cambiar a modo desarrollador",
+    "switchToCorporateMode": "Cambiar a modo Standard"
   },
   "lang": {
     "switchToEn": "Switch to English",

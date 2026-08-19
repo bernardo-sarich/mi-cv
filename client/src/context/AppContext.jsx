@@ -8,9 +8,13 @@ function detectInitialLang() {
   return navigator.language?.toLowerCase().startsWith('es') ? 'es' : 'en'
 }
 
+function detectInitialTheme() {
+  return window.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+}
+
 export function AppProvider({ children }) {
   const { i18n } = useTranslation()
-  const [theme, setTheme] = useState('dark')
+  const [theme, setTheme] = useState(detectInitialTheme)
   const [lang, setLang] = useState(detectInitialLang)
   const [cvData, setCvData] = useState(null)
   const [cvLoading, setCvLoading] = useState(true)

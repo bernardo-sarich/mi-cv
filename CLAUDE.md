@@ -70,7 +70,7 @@ La connection string (`ConnectionStrings:CvDatabase`) sigue la misma convención
 
 **Loading de primera visita.** `App.jsx` solo muestra `LoadingScreen` (estética terminal) cuando `useCVData().loading` es `true` **y** es la primera vez que ese navegador visita el sitio (flag en `localStorage`, ver `cv-loading-indicator` spec) — cubre el cold start de Azure + la descarga de assets sin cachear que solo ocurre en esa primera carga por dispositivo; en visitas repetidas no se muestra.
 
-**Theme y language** viven en `context/AppContext.jsx`, expuestos solo vía `useTheme()` / `useLang()`. El theme alterna la clase `dark` en `<html>`; el language llama a `i18n.changeLanguage`. Ambos arrancan en dark/es y no persisten entre sesiones.
+**Theme y language** viven en `context/AppContext.jsx`, expuestos solo vía `useTheme()` / `useLang()`. El theme alterna la clase `dark` en `<html>`; el language llama a `i18n.changeLanguage`. Ninguno persiste entre sesiones: el language inicial se detecta de `navigator.language` (español si el navegador reporta un locale `es-*`, inglés en cualquier otro caso); el theme inicial se detecta de `prefers-color-scheme` (oscuro si el SO lo pide, claro en cualquier otro caso, incluida la ausencia de `matchMedia`).
 
 **Colores como tokens explícitos, no la paleta de Tailwind.** `tailwind.config.js` define tokens planos (`bg`, `surface`, `border`, `text`, `textDim`, `accent`, `accentDim`, `onAccent`, `navBg`) más su gemelo con prefijo `dark-`. Todo elemento themeado debe declarar ambos: `bg-surface dark:bg-dark-surface`. Los valores están fijados en `openspec/specs/design-system/spec.md`.
 

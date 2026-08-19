@@ -5,7 +5,8 @@ import { useTheme } from '../../context/AppContext.jsx'
 export default function ThemeToggle() {
   const { t } = useTranslation()
   const { theme, toggleTheme } = useTheme()
-  const label = theme === 'dark' ? t('theme.switchToLight') : t('theme.switchToDark')
+  const label = theme === 'light' ? t('theme.switchToDeveloperMode') : t('theme.switchToCorporateMode')
+  const text = theme === 'light' ? t('theme.developerMode') : t('theme.corporateMode')
 
   return (
     <button
@@ -22,7 +23,7 @@ export default function ThemeToggle() {
           exit={{ opacity: 0 }}
           transition={{ duration: 0.175 }}
         >
-          {theme === 'dark' ? 'Dark' : 'Light'}
+          {text}
         </motion.span>
       </AnimatePresence>
     </button>
