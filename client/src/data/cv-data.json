@@ -1,9 +1,13 @@
 {
   "es": {
     "name": "Bernardo Sarich",
-    "title": "Backend Developer | Desarrollo asistido por IA",
-    "bio": "Desarrollador Backend .NET especializado en sistemas empresariales críticos, integraciones y automatización del desarrollo con IA.",
-    "stats": [{ "value": 8, "suffix": "+", "label": "años de experiencia" }],
+    "title": "Backend Engineer | Desarrollo Asistido por IA",
+    "bio": "Impulsé la adopción de desarrollo asistido por IA en mi organización, de iniciativa personal a política oficial: construí 17 herramientas con Claude Code, hoy usadas por 7 desarrolladores de 3 equipos.\n\nComo Backend Engineer .NET, construí mi carrera en sistemas donde un error de cálculo no es un bug, es plata — y hoy aplico esa misma disciplina al desarrollo full-stack, este sitio incluido.",
+    "stats": [
+      { "value": 8, "suffix": "+", "label": "años de experiencia" },
+      { "value": 17, "suffix": "", "label": "herramientas de IA" },
+      { "value": 689, "suffix": "", "label": "horas ahorradas" }
+    ],
     "experience": [
       {
         "company": "FyO",
@@ -11,7 +15,7 @@
         "dates": "2021 — presente",
         "bullets": [         
           "Impulsé la adopción de desarrollo asistido por IA dentro de mi organización. Escribí la documentación que lo sustentaba, financié mi propio piloto y capacité a desarrolladores de otros equipos — lo que empezó como una iniciativa personal hoy es política oficial de la empresa.",
-          "Diseñé y construí 17 herramientas de automatización con IA (Claude Code) que agilizan tareas repetitivas del desarrollo —como un ABM completo, que bajó de 10 horas a 20 minutos—, liberando tiempo para resolver problemas de mayor valor; hoy las usan activamente 7 desarrolladores de 3 equipos distintos, incluyendo dos arquitectos.",
+          "Diseñé y construí 17 skills de Claude Code a medida de nuestro propio código que agilizan tareas repetitivas del desarrollo —como un ABM completo, que bajó de 10 horas a 20 minutos—, liberando tiempo para resolver problemas de mayor valor; hoy las usan activamente 7 desarrolladores de 3 equipos distintos, incluyendo dos arquitectos.",
           "Implementé la comunicación del Gestor de Órdenes de Desvíos y Fijaciones en uno de los dos sistemas involucrados, integrándolo con Azure Service Bus. Evitó la carga manual duplicada de 1.125 Desvíos y 5.263 Fijaciones en lo que va de 2026, un ahorro estimado de 689 horas de trabajo manual.",
           "Diseñé e implementé el Proceso Automático de Facturación de Secadas, que ejecuta a diario algoritmos de cálculo complejos; emitió automáticamente más de 800 facturas en los ultimos 4 meses, sin intervención manual del usuario."
         ]
@@ -46,9 +50,10 @@
     "projects": [
       {
         "name": "mi-cv",
-        "desc": "CV en línea.",
-        "stack": ["React", "Tailwind CSS", "C#", "Azure Static Web Apps", 
-                  ".NET Core", "EF Core", "Clean Architecture", "Azure SQL Database", "HTML"],
+        "desc": "CV en línea (este mismo sitio), full-stack: backend en .NET y frontend en React.",
+        "stack": ["React", "HTML", "Tailwind CSS", "C#",
+                  ".NET Core", "EF Core", "Clean Architecture",
+                  "Azure Static Web Apps", "Neon PostgreSQL"],
         "link": "https://github.com/bernardo-sarich/mi-cv"
       },
       {
@@ -62,9 +67,13 @@
 
  "en": {
   "name": "Bernardo Sarich",
-  "title": "Backend Developer | AI-assisted Development",
-  "bio": "Backend .NET Developer specialized in critical enterprise systems, integrations, and AI-driven development automation.",
-  "stats": [{ "value": 8, "suffix": "+", "label": "years of experience" }],
+  "title": "Backend Engineer | AI-Assisted Development",
+  "bio": "I led the adoption of AI-assisted development within my organization, taking it from a personal initiative to official policy: I built 17 tools with Claude Code, now used by 7 developers across 3 teams.\n\nAs a Backend .NET Engineer, I built my career in systems where a calculation error isn't a bug — it's money — and today I bring that same discipline to full-stack development, this site included.",
+  "stats": [
+    { "value": 8, "suffix": "+", "label": "years of experience" },
+    { "value": 17, "suffix": "", "label": "AI tools" },
+    { "value": 689, "suffix": "", "label": "hours saved" }
+  ],
   "experience": [
     {
       "company": "FyO",
@@ -72,7 +81,7 @@
       "dates": "2021 — present",
       "bullets": [
         "Drove the adoption of AI-assisted development within my organization. Wrote the documentation that supported it, self-funded my own pilot, and trained developers from other teams — what started as a personal initiative is now official company policy.",
-        "Designed and built 17 AI-powered automation tools (Claude Code) that streamline repetitive development tasks — including a full CRUD module that went from 10 hours down to 20 minutes — freeing up time to focus on higher-value problems; they're now actively used by 7 developers across 3 different teams, including two architects.",
+        "Designed and built 17 Claude Code skills tailored to our own codebase that streamline repetitive development tasks — including a full CRUD module that went from 10 hours down to 20 minutes — freeing up time to focus on higher-value problems; they're now actively used by 7 developers across 3 different teams, including two architects.",
         "Implemented communication for the Diversions and Fixations Order Manager across one of the two systems involved, integrating it with Azure Service Bus. This avoided duplicate manual entry of 1,125 Diversions and 5,263 Fixations so far in 2026, an estimated saving of 689 hours of manual work.",
         "Designed and implemented the Automatic Drying Invoicing Process, which runs complex calculation algorithms daily; it automatically issued over 800 invoices in the last 4 months with no manual user intervention."
       ]
@@ -107,9 +116,10 @@
   "projects": [
     {
       "name": "mi-cv",
-      "desc": "Online CV.",
-      "stack": ["React", "Tailwind CSS", "C#", "Azure Static Web Apps",
-                ".NET Core", "EF Core", "Clean Architecture", "Azure SQL Database", "HTML"],
+      "desc": "Online CV (this very site), full-stack: .NET backend and React frontend.",
+      "stack": ["React", "HTML", "Tailwind CSS", "C#",
+                ".NET Core", "EF Core", "Clean Architecture",
+                "Azure Static Web Apps", "Neon PostgreSQL"],
       "link": "https://github.com/bernardo-sarich/mi-cv"
     },
     {

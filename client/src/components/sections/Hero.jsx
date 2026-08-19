@@ -27,7 +27,7 @@ function getBlockVariants(reduced) {
 function Stat({ value, suffix, label, start }) {
   const count = useCounterAnimation(value, 1200, start)
   return (
-    <Card className="flex flex-col items-start gap-1 px-6 py-5">
+    <Card className="flex min-w-[8rem] flex-1 flex-col items-start gap-1 px-6 py-5">
       <span className="font-mono text-2xl font-bold text-accent dark:text-dark-accent">
         {count}
         {suffix}
@@ -88,7 +88,7 @@ export default function Hero() {
 
           <motion.p
             variants={blockVariants}
-            className="max-w-prose text-textDim dark:text-dark-textDim"
+            className="max-w-prose whitespace-pre-line text-textDim dark:text-dark-textDim"
           >
             {data.bio}
           </motion.p>
@@ -107,12 +107,14 @@ export default function Hero() {
             </div>
           </motion.div>
 
-          <motion.div variants={blockVariants} className="flex flex-wrap items-stretch gap-4">
-            <div ref={statsRef} className="flex flex-wrap gap-8">
-              {data.stats.map((stat) => (
-                <Stat key={stat.label} {...stat} start={statsVisible} />
-              ))}
-            </div>
+          <motion.div
+            ref={statsRef}
+            variants={blockVariants}
+            className="flex flex-wrap items-stretch gap-4"
+          >
+            {data.stats.map((stat) => (
+              <Stat key={stat.label} {...stat} start={statsVisible} />
+            ))}
 
             <div className="flex min-w-[11rem] flex-1 flex-col gap-3">
               <Button
