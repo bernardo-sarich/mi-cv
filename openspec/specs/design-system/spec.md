@@ -83,11 +83,15 @@ The system SHALL provide a `Badge` UI component for displaying short labels (e.g
 - **THEN** it renders that content as small text inside a bordered container using the theme's `border` and `textDim`/`text` tokens
 
 ### Requirement: Card component
-The system SHALL provide a `Card` UI component that renders a container using the `surface` background token, the `border` token, and a rounded border radius, with no embedded business logic.
+The system SHALL provide a `Card` UI component that renders a container using the `surface` background token and a rounded border radius, with no embedded business logic. The container's elevation treatment SHALL differ by theme: in light theme it SHALL render with a soft box-shadow and no visible border; in dark theme it SHALL render with the `border` token and no box-shadow.
 
 #### Scenario: Card renders themed container
-- **WHEN** `Card` is rendered with child content
-- **THEN** it renders a container with `surface` background, `border`-colored border, and rounded corners containing that content
+- **WHEN** `Card` is rendered with child content in dark theme
+- **THEN** it renders a container with `surface` background, rounded corners, a `border`-colored border, and no box-shadow
+
+#### Scenario: Card renders with shadow in light theme
+- **WHEN** `Card` is rendered with child content in light theme
+- **THEN** it renders a container with `surface` background, rounded corners, a soft box-shadow, and no visible border
 
 ### Requirement: SectionLabel component
 The system SHALL provide a `SectionLabel` UI component that renders small decorative text in the `mono` font family using the `textDim` color token at full opacity, intended to visually label a page section (e.g. resembling `<section id="...">`), with no embedded business logic. The component SHALL NOT apply any additional opacity reduction beyond the dimming already provided by the `textDim` token, so its rendered color meets a 4.5:1 contrast ratio against the surrounding background in both themes.

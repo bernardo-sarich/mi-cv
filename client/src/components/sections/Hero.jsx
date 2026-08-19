@@ -27,7 +27,7 @@ function getBlockVariants(reduced) {
 function Stat({ value, suffix, label, start }) {
   const count = useCounterAnimation(value, 1200, start)
   return (
-    <Card className="flex flex-col items-start gap-1 px-5 py-4">
+    <Card className="flex flex-col items-start gap-1 px-6 py-5">
       <span className="font-mono text-2xl font-bold text-accent dark:text-dark-accent">
         {count}
         {suffix}
@@ -60,7 +60,7 @@ export default function Hero() {
   if (!data) return null
 
   return (
-    <section id="sobre-mi" className="px-6 py-8 sm:px-8">
+    <section id="sobre-mi" className="px-6 py-14 sm:px-8 sm:py-16">
       <motion.div
         variants={containerVariants}
         initial="hidden"

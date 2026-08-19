@@ -17,7 +17,7 @@ function GitHubIcon(props) {
 function ProjectCard({ project }) {
   const { t } = useTranslation()
   return (
-    <Card className="w-[calc(100vw-3rem)] flex-shrink-0 snap-start p-5 transition-all duration-300 hover:scale-[1.02] hover:border-accent dark:hover:border-dark-accent hover:shadow-[0_0_20px_rgba(31,157,92,0.35)] dark:hover:shadow-[0_0_20px_rgba(61,220,132,0.35)] sm:w-[300px]">
+    <Card className="w-[calc(100vw-3rem)] flex-shrink-0 snap-start p-6 transition-all duration-300 hover:scale-[1.02] hover:border-accent dark:hover:border-dark-accent hover:shadow-[0_0_20px_rgba(31,157,92,0.35)] dark:hover:shadow-[0_0_20px_rgba(61,220,132,0.35)] sm:w-[300px]">
       <h3 className="font-mono text-lg font-bold text-accent dark:text-dark-accent">
         {project.name}
       </h3>
@@ -92,7 +92,7 @@ export default function Projects() {
   if (!data) return null
 
   return (
-    <section id="projects" className="px-6 py-8 sm:px-8">
+    <section id="projects" className="px-6 py-14 sm:px-8 sm:py-16">
       <div className="mx-auto max-w-5xl">
         <div className="relative">
           <SectionLabel>{'<section id="projects">'}</SectionLabel>
@@ -120,7 +120,7 @@ export default function Projects() {
 
         <div
           ref={scrollerRef}
-          className="no-scrollbar mx-auto mt-8 flex max-w-[976px] gap-4 overflow-x-auto scroll-px-0 sm:scroll-px-5 sm:justify-center snap-x snap-mandatory scroll-smooth px-0 py-3 sm:px-5"
+          className="no-scrollbar mx-auto mt-12 flex max-w-[976px] gap-4 overflow-x-auto scroll-px-0 sm:scroll-px-5 sm:justify-center snap-x snap-mandatory scroll-smooth px-0 py-3 sm:px-5"
         >
           {data.projects.map((project, index) => (
             <ProjectCard key={`${project.name}-${index}`} project={project} />

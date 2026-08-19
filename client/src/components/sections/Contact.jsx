@@ -120,7 +120,7 @@ function ContactLink({ link }) {
     >
       {/* Same glow values as ProjectCard in Projects.jsx — they duplicate the
           accent token on purpose; change them together. */}
-      <Card className="flex items-center gap-3 p-4 transition-all duration-300 hover:border-accent dark:hover:border-dark-accent hover:shadow-[0_0_20px_rgba(31,157,92,0.35)] dark:hover:shadow-[0_0_20px_rgba(61,220,132,0.35)]">
+      <Card className="flex items-center gap-3 p-5 transition-all duration-300 hover:border-accent dark:hover:border-dark-accent hover:shadow-[0_0_20px_rgba(31,157,92,0.35)] dark:hover:shadow-[0_0_20px_rgba(61,220,132,0.35)]">
         <span className="text-accent dark:text-dark-accent">
           <Icon />
         </span>
@@ -226,12 +226,12 @@ export default function Contact() {
   const contactLinks = buildContactLinks(CONTACT_INFO[lang])
 
   return (
-    <section id="contacto" className="px-6 py-8 sm:px-8">
+    <section id="contacto" className="px-6 py-14 sm:px-8 sm:py-16">
       <div className="mx-auto max-w-5xl">
         <SectionLabel>{'<section id="contacto">'}</SectionLabel>
         <SectionTitle>{t('contact.title')}</SectionTitle>
 
-        <div className="mt-8 grid gap-8 md:grid-cols-2">
+        <div className="mt-12 grid gap-8 md:grid-cols-2">
           <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-4">
             <div className="flex flex-col gap-1.5">
               <label htmlFor="contact-name" className={LABEL_CLASSES}>

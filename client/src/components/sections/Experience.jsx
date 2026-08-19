@@ -83,7 +83,7 @@ export default function Experience() {
   if (!data) return null
 
   return (
-    <section id="experience" className="px-6 py-8 sm:px-8">
+    <section id="experience" className="px-6 py-14 sm:px-8 sm:py-16">
       <div className="mx-auto max-w-5xl">
         <SectionLabel>{'<section id="experience">'}</SectionLabel>
         <SectionTitle>{t('experience.title')}</SectionTitle>
@@ -91,7 +91,7 @@ export default function Experience() {
         {/* The rail sits at the left edge of the content column: flush left when
             the date stacks above on narrow viewports, and after the 10rem date
             column from md up. */}
-        <div ref={progressRef} className="relative mt-8">
+        <div ref={progressRef} className="relative mt-12">
           <div className="absolute left-0 top-0 h-full border-l border-border dark:border-dark-border md:left-40" />
           <div
             className="absolute left-0 top-0 border-l-2 border-accent dark:border-dark-accent transition-[height] duration-150 ease-out md:left-40"

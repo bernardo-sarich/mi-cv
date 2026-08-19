@@ -36,7 +36,7 @@ function SkillCategory({ category, index }) {
   const badgeVariants = getBadgeVariants(reduced)
 
   return (
-    <Card ref={ref} className="p-5">
+    <Card ref={ref} className="p-6">
       <span className="font-mono text-xs uppercase tracking-wide text-textDim dark:text-dark-textDim">
         {category.name}
       </span>
@@ -63,13 +63,13 @@ export default function Skills() {
   if (!data) return null
 
   return (
-    <section id="stack" className="px-6 py-8 sm:px-8">
+    <section id="stack" className="px-6 py-14 sm:px-8 sm:py-16">
       <div className="mx-auto max-w-5xl">
         <SectionLabel>{'<section id="stack">'}</SectionLabel>
         <SectionTitle>{t('skills.title')}</SectionTitle>
 
         <div
-          className="mt-8 grid gap-4"
+          className="mt-12 grid gap-4"
           style={{
             gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
           }}
