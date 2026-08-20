@@ -12,9 +12,11 @@
     "format:check": "prettier --check ."
   },
   "dependencies": {
+    "cuss": "^2.2.0",
     "framer-motion": "^13.1.0",
     "i18next": "^26.3.6",
     "naughty-words": "^1.2.0",
+    "profanities": "^3.0.1",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "react-i18next": "^17.0.11"
